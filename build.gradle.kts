@@ -32,7 +32,7 @@ kotlin {
 
 compose.desktop {
     application {
-        mainClass = "MainKt"
+        mainClass = "com.mikitellurium.shinytracker.MainKt"
     }
 }
 

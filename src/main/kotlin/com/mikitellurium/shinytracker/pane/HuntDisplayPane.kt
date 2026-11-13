@@ -20,7 +20,7 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
     private val pokemonName = Label().apply {
         font = Font.font(FONT_DEFAULT, FontWeight.BOLD, 40.0)
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2))
-        layoutY = 4.0
+        layoutY = 0.0
     }
     private val renderBounds = Rectangle().apply {
         layoutY = 55.0
@@ -76,13 +76,49 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2))
         layoutY = 280.0
     }
+    private val shinyOddsTitle = Label().apply {
+        prefWidth = 120.0
+        text = "Odds"
+        font = Font.font(FONT_DEFAULT, FontWeight.BOLD, 20.0)
+        styleClass.add("info-label-header")
+        layoutYProperty().bind(increaseButton.layoutYProperty().add(increaseButton.heightProperty()).add(10))
+    }
+    private val shinyOdds = Label().apply {
+        prefWidth = 180.0
+        font = Font.font(FONT_DEFAULT, FontWeight.BOLD, 20.0)
+        styleClass.add("info-label")
+        layoutYProperty().bind(increaseButton.layoutYProperty().add(increaseButton.heightProperty()).add(10))
+    }
+
+    private val dryStreakTitle = Label().apply {
+        prefWidth = 120.0
+        text = "Dry Streak"
+        font = Font.font(FONT_DEFAULT, FontWeight.BOLD, 20.0)
+        styleClass.add("info-label-header")
+        layoutYProperty().bind(shinyOddsTitle.layoutYProperty().add(shinyOdds.heightProperty()).subtract(1))
+    }
+
+    private val dryStreak = Label().apply {
+        prefWidth = 180.0
+        font = Font.font(FONT_DEFAULT, FontWeight.BOLD, 20.0)
+        styleClass.add("info-label")
+        layoutYProperty().bind(shinyOddsTitle.layoutYProperty().add(shinyOdds.heightProperty()).subtract(1))
+    }
 
     init {
+        shinyOddsTitle.layoutXProperty().bind(widthProperty().subtract(shinyOddsTitle.widthProperty().add(shinyOdds.widthProperty())).divide(2))
+        shinyOdds.layoutXProperty().bind(shinyOddsTitle.layoutXProperty().add(shinyOddsTitle.widthProperty()))
+        dryStreakTitle.layoutXProperty().bind(widthProperty().subtract(dryStreakTitle.widthProperty().add(dryStreak.widthProperty())).divide(2))
+        dryStreak.layoutXProperty().bind(dryStreakTitle.layoutXProperty().add(dryStreakTitle.widthProperty()))
+
         pokemonName.text = "Pokèmon"
-        val pokemon = "genesect"
+        val pokemon = "froslass"
         val spriteUrl = "/sprites/pokemons/$pokemon.gif"
         pokemonRender.image = Image(spriteUrl)
         counter.text = "1"
-        children.addAll(pokemonName, renderBounds, pokemonRender, counter, increaseButton)
+        shinyOdds.text = "1/4096"
+        dryStreak.text = "100%"
+        children.addAll(pokemonName, renderBounds, pokemonRender, counter, increaseButton, shinyOddsTitle, shinyOdds,
+            dryStreakTitle, dryStreak)
     }
 }

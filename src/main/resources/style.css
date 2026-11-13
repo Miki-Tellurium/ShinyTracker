@@ -1,14 +1,14 @@
 .info-label-header {
-    -fx-background-color: #35C1FF;
+    -fx-background-color: #0052ff;
     -fx-text-fill: #FAFAFA;
 	-fx-border-color: black;
 	-fx-border-width: 2px;
-	-fx-padding: 5px;
+	-fx-padding: 2px;
 }
 
 .info-label {
     -fx-alignment: center-right;
 	-fx-border-color: black black black transparent;
 	-fx-border-width: 2px;
-	-fx-padding: 5px;
+	-fx-padding: 2px;
 }

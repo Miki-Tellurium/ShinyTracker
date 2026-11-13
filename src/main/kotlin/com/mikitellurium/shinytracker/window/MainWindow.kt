@@ -2,6 +2,7 @@ package com.mikitellurium.shinytracker.window
 
 import com.mikitellurium.shinytracker.pane.HuntDisplayPane
 import com.mikitellurium.shinytracker.util.APP_NAME
+import com.mikitellurium.shinytracker.util.CSS_STYLE
 import com.mikitellurium.shinytracker.util.WINDOW_ICON
 import javafx.scene.Scene
 import javafx.scene.image.Image
@@ -23,6 +24,7 @@ class MainWindow(
         mainStage.x = (screenSize.getWidth() - mainStage.width) / 2
         mainStage.y = (screenSize.getHeight() - mainStage.height) / 2
         val scene = Scene(HuntDisplayPane(this))
+        scene.stylesheets.add(CSS_STYLE)
         mainStage.scene = scene
         mainStage.show()
     }

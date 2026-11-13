@@ -6,6 +6,7 @@ import com.mikitellurium.shinytracker.util.INCREASE_BUTTON_BACKGROUND
 import com.mikitellurium.shinytracker.util.INCREASE_BUTTON_PRESSED_BACKGROUND
 import com.mikitellurium.shinytracker.window.MainWindow
 import javafx.beans.binding.Bindings
+import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
@@ -55,18 +56,18 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
             renderBounds.layoutYProperty(), renderBounds.heightProperty(), layoutBoundsProperty()
         ))
     }
+    private val counterCenterY = renderBounds.layoutYProperty().add(renderBounds.heightProperty()).add(35)
     private val counter = Label().apply {
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2))
-        // Fixed vertical center
-        val centerY = renderBounds.layoutYProperty().add(renderBounds.heightProperty()).add(37)
-        layoutYProperty().bind(centerY.subtract(heightProperty().divide(2)))
+        layoutYProperty().bind(counterCenterY.subtract(heightProperty().divide(2)))
         textProperty().addListener { _, _, _ ->
             val size = 70.0 - (text.length * 4)
             font = Font.font(FONT_DEFAULT, FontWeight.EXTRA_BOLD, size)
         }
     }
+
     private val increaseButton = object : AnimatedButton(INCREASE_BUTTON_BACKGROUND, INCREASE_BUTTON_PRESSED_BACKGROUND) {
-        private var counter = 0
+        private var counter = 1
         override fun onMousePressed() {
             counter++
             this@HuntDisplayPane.counter.text = "0".repeat(counter)
@@ -74,8 +75,9 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
     }.apply {
         setPrefSize(150.0, 75.0)
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2))
-        layoutY = 280.0
+        layoutYProperty().bind(counterCenterY.add(35))
     }
+
     private val shinyOddsTitle = Label().apply {
         prefWidth = 120.0
         text = "Odds"
@@ -104,6 +106,21 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         styleClass.add("info-label")
         layoutYProperty().bind(shinyOddsTitle.layoutYProperty().add(shinyOdds.heightProperty()).subtract(1))
     }
+    private val finishButton = Button("Finish").apply {
+        font = Font.font(FONT_DEFAULT, FontWeight.EXTRA_BOLD, 14.0)
+        layoutX = 300.0
+        layoutYProperty().bind(this@HuntDisplayPane.heightProperty().subtract(heightProperty()).subtract(7))
+    }
+    private val pauseButton = Button("Pause").apply {
+        font = Font.font(FONT_DEFAULT, FontWeight.EXTRA_BOLD, 14.0)
+        layoutX = 370.0
+        layoutYProperty().bind(this@HuntDisplayPane.heightProperty().subtract(heightProperty()).subtract(7))
+    }
+    private val editButton = Button("Edit").apply {
+        font = Font.font(FONT_DEFAULT, FontWeight.EXTRA_BOLD, 14.0)
+        layoutX = 450.0
+        layoutYProperty().bind(this@HuntDisplayPane.heightProperty().subtract(heightProperty()).subtract(7))
+    }
 
     init {
         shinyOddsTitle.layoutXProperty().bind(widthProperty().subtract(shinyOddsTitle.widthProperty().add(shinyOdds.widthProperty())).divide(2))
@@ -111,14 +128,14 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         dryStreakTitle.layoutXProperty().bind(widthProperty().subtract(dryStreakTitle.widthProperty().add(dryStreak.widthProperty())).divide(2))
         dryStreak.layoutXProperty().bind(dryStreakTitle.layoutXProperty().add(dryStreakTitle.widthProperty()))
 
-        pokemonName.text = "Pokèmon"
-        val pokemon = "froslass"
-        val spriteUrl = "/sprites/pokemons/$pokemon.gif"
+        val pokemon = "Froslass"
+        pokemonName.text = pokemon
+        val spriteUrl = "/sprites/pokemons/${pokemon.lowercase()}.gif"
         pokemonRender.image = Image(spriteUrl)
-        counter.text = "1"
+        counter.text = "0"
         shinyOdds.text = "1/4096"
         dryStreak.text = "100%"
         children.addAll(pokemonName, renderBounds, pokemonRender, counter, increaseButton, shinyOddsTitle, shinyOdds,
-            dryStreakTitle, dryStreak)
+            dryStreakTitle, dryStreak, finishButton, pauseButton, editButton)
     }
 }

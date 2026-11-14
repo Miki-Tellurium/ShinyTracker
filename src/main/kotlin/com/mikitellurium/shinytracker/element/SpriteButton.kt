@@ -15,8 +15,6 @@ import javafx.util.Duration
 abstract class SpriteButton(
     val defaultSprite: Image,
     val pressedSprite: Image,
-    val spriteWidth: Int = defaultSprite.width.toInt(),
-    val spriteHeight: Int = defaultSprite.height.toInt(),
     width: Double = defaultSprite.width,
     height: Double = defaultSprite.height,
     animationMillis: Int = 100

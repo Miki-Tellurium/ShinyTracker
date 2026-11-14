@@ -111,20 +111,44 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         styleClass.add("info-label")
         layoutYProperty().bind(shinyOddsTitle.layoutYProperty().add(shinyOdds.heightProperty()).subtract(1))
     }
-    private val finishButton = Button("Finish").apply {
+    private val finishButton = object : SpriteButton(GENERIC_BUTTON_SPRITE, GENERIC_BUTTON_PRESSED_SPRITE, 70.0, 28.0) {
+        override fun onMousePressed() {
+            println("Finish")
+        }
+
+        override fun spriteRenderer(): SpriteRenderer = ExtensibleWidthButtonRenderer(7, 16, 3)
+    }.apply {
         font = Font.font(FONT_DEFAULT, FontWeight.EXTRA_BOLD, 14.0)
-        layoutX = 300.0
+        layoutX = 270.0
         layoutYProperty().bind(this@HuntDisplayPane.heightProperty().subtract(heightProperty()).subtract(7))
+        text = "Finish"
+        textFill = Color.WHITE
     }
-    private val pauseButton = Button("Pause").apply {
+    private val pauseButton = object : SpriteButton(GENERIC_BUTTON_SPRITE, GENERIC_BUTTON_PRESSED_SPRITE, 70.0, 28.0) {
+        override fun onMousePressed() {
+            println("Pause")
+        }
+
+        override fun spriteRenderer(): SpriteRenderer = ExtensibleWidthButtonRenderer(7, 16, 3)
+    }.apply {
         font = Font.font(FONT_DEFAULT, FontWeight.EXTRA_BOLD, 14.0)
-        layoutX = 370.0
+        layoutX = 360.0
         layoutYProperty().bind(this@HuntDisplayPane.heightProperty().subtract(heightProperty()).subtract(7))
+        text = "Pause"
+        textFill = Color.WHITE
     }
-    private val editButton = Button("Edit").apply {
+    private val editButton = object : SpriteButton(GENERIC_BUTTON_SPRITE, GENERIC_BUTTON_PRESSED_SPRITE, 70.0, 28.0) {
+        override fun onMousePressed() {
+            println("Edit")
+        }
+
+        override fun spriteRenderer(): SpriteRenderer = ExtensibleWidthButtonRenderer(7, 16, 3)
+    }.apply {
         font = Font.font(FONT_DEFAULT, FontWeight.EXTRA_BOLD, 14.0)
         layoutX = 450.0
         layoutYProperty().bind(this@HuntDisplayPane.heightProperty().subtract(heightProperty()).subtract(7))
+        text = "Edit"
+        textFill = Color.WHITE
     }
 
     init {

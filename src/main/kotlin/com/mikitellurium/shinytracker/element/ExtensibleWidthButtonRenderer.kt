@@ -10,8 +10,8 @@ import kotlin.math.floor
  * at the button edges and the center is filled for the whole button length.
  * @param capSz The size in pixel of the edge caps
  */
-class ExtensibleWidthButtonRenderer(private val capSz: Int): SpriteRenderer {
-    override fun render(g: GraphicsContext, img: Image, w: Double, h: Double, sw: Int, sh: Int) {
+class ExtensibleWidthButtonRenderer(private val sw: Int, private val sh: Int, private val capSz: Int): SpriteRenderer {
+    override fun render(g: GraphicsContext, img: Image, w: Double, h: Double) {
         val iw = img.width
         val ih = img.height
 

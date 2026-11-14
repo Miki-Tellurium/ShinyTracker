@@ -2,8 +2,8 @@ package com.mikitellurium.shinytracker.pane
 
 import com.mikitellurium.shinytracker.element.AnimatedButton
 import com.mikitellurium.shinytracker.util.FONT_DEFAULT
-import com.mikitellurium.shinytracker.util.INCREASE_BUTTON_BACKGROUND
-import com.mikitellurium.shinytracker.util.INCREASE_BUTTON_PRESSED_BACKGROUND
+import com.mikitellurium.shinytracker.util.INCREASE_BUTTON_PRESSED_SPRITE
+import com.mikitellurium.shinytracker.util.INCREASE_BUTTON_SPRITE
 import com.mikitellurium.shinytracker.window.MainWindow
 import javafx.beans.binding.Bindings
 import javafx.scene.control.Button
@@ -66,14 +66,13 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         }
     }
 
-    private val increaseButton = object : AnimatedButton(INCREASE_BUTTON_BACKGROUND, INCREASE_BUTTON_PRESSED_BACKGROUND) {
+    private val increaseButton = object : AnimatedButton(INCREASE_BUTTON_SPRITE, INCREASE_BUTTON_PRESSED_SPRITE, 150.0, 75.0) {
         private var counter = 1
         override fun onMousePressed() {
             counter++
             this@HuntDisplayPane.counter.text = "0".repeat(counter)
         }
     }.apply {
-        setPrefSize(150.0, 75.0)
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2))
         layoutYProperty().bind(counterCenterY.add(35))
     }
@@ -121,6 +120,12 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         layoutX = 450.0
         layoutYProperty().bind(this@HuntDisplayPane.heightProperty().subtract(heightProperty()).subtract(7))
     }
+    val testButton = Button("Test Button").apply {
+        font = Font.font(FONT_DEFAULT, FontWeight.BOLD, 16.0)
+        styleClass.add("sprite-button")
+        layoutX = 20.0
+        layoutY = 50.0
+    }
 
     init {
         shinyOddsTitle.layoutXProperty().bind(widthProperty().subtract(shinyOddsTitle.widthProperty().add(shinyOdds.widthProperty())).divide(2))
@@ -130,12 +135,12 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
 
         val pokemon = "Froslass"
         pokemonName.text = pokemon
-        val spriteUrl = "/sprites/pokemons/${pokemon.lowercase()}.gif"
+        val spriteUrl = "/sprites/pokemon/${pokemon.lowercase()}.gif"
         pokemonRender.image = Image(spriteUrl)
         counter.text = "0"
         shinyOdds.text = "1/4096"
         dryStreak.text = "100%"
         children.addAll(pokemonName, renderBounds, pokemonRender, counter, increaseButton, shinyOddsTitle, shinyOdds,
-            dryStreakTitle, dryStreak, finishButton, pauseButton, editButton)
+            dryStreakTitle, dryStreak, finishButton, pauseButton, editButton, testButton)
     }
 }

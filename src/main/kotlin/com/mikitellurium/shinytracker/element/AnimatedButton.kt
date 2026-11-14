@@ -13,7 +13,7 @@ import javafx.scene.layout.BackgroundSize
 import javafx.util.Duration
 
 
-abstract class AnimatedButton(
+open class AnimatedButton(
     defaultSprite: Image,
     pressedSprite: Image,
     width: Double = defaultSprite.width,

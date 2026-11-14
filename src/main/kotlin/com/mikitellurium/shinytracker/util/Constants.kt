@@ -1,7 +1,6 @@
 package com.mikitellurium.shinytracker.util
 
 import javafx.scene.image.Image
-import javafx.scene.layout.*
 
 
 // General
@@ -14,6 +13,8 @@ const val CSS_STYLE = "style.css"
 // Elements
 val INCREASE_BUTTON_SPRITE: Image = Image("/sprites/button/increase_button.png", 640.0, 320.0, true, true)
 val INCREASE_BUTTON_PRESSED_SPRITE = Image("/sprites/button/increase_button_pressed.png", 640.0, 320.0, true, true)
+val GENERIC_BUTTON_SPRITE: Image = Image("/sprites/button/generic_button.png", 320.0, 160.0, true, true)
+val GENERIC_BUTTON_PRESSED_SPRITE: Image = Image("/sprites/button/generic_button_pressed.png", 320.0, 160.0, true, true)
 
 // Sprites
 val MISSING_NO_SPRITE = Image("/sprites/missing_no.png")

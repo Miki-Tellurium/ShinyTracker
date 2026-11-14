@@ -1,9 +1,15 @@
 package com.mikitellurium.shinytracker.pane
 
 import com.mikitellurium.shinytracker.element.AnimatedButton
+import com.mikitellurium.shinytracker.element.ExtensibleWidthButtonRenderer
+import com.mikitellurium.shinytracker.element.SpriteButton
+import com.mikitellurium.shinytracker.element.SpriteRenderer
 import com.mikitellurium.shinytracker.util.FONT_DEFAULT
+import com.mikitellurium.shinytracker.util.GENERIC_BUTTON_PRESSED_SPRITE
+import com.mikitellurium.shinytracker.util.GENERIC_BUTTON_SPRITE
 import com.mikitellurium.shinytracker.util.INCREASE_BUTTON_PRESSED_SPRITE
 import com.mikitellurium.shinytracker.util.INCREASE_BUTTON_SPRITE
+import com.mikitellurium.shinytracker.util.TEST_BUTTON_SPRITE
 import com.mikitellurium.shinytracker.window.MainWindow
 import javafx.beans.binding.Bindings
 import javafx.scene.control.Button
@@ -120,12 +126,6 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         layoutX = 450.0
         layoutYProperty().bind(this@HuntDisplayPane.heightProperty().subtract(heightProperty()).subtract(7))
     }
-    val testButton = Button("Test Button").apply {
-        font = Font.font(FONT_DEFAULT, FontWeight.BOLD, 16.0)
-        styleClass.add("sprite-button")
-        layoutX = 20.0
-        layoutY = 50.0
-    }
 
     init {
         shinyOddsTitle.layoutXProperty().bind(widthProperty().subtract(shinyOddsTitle.widthProperty().add(shinyOdds.widthProperty())).divide(2))
@@ -141,6 +141,6 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         shinyOdds.text = "1/4096"
         dryStreak.text = "100%"
         children.addAll(pokemonName, renderBounds, pokemonRender, counter, increaseButton, shinyOddsTitle, shinyOdds,
-            dryStreakTitle, dryStreak, finishButton, pauseButton, editButton, testButton)
+            dryStreakTitle, dryStreak, finishButton, pauseButton, editButton)
     }
 }

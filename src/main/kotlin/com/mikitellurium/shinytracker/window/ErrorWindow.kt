@@ -1,10 +1,18 @@
 package com.mikitellurium.shinytracker.window
 
+import com.mikitellurium.shinytracker.element.ExtensibleWidthButtonRenderer
+import com.mikitellurium.shinytracker.element.SpriteButton
+import com.mikitellurium.shinytracker.element.SpriteRenderer
+import com.mikitellurium.shinytracker.util.GENERIC_RED_BUTTON_PRESSED_SPRITE
+import com.mikitellurium.shinytracker.util.GENERIC_RED_BUTTON_SPRITE
 import com.mikitellurium.shinytracker.util.font
+import javafx.geometry.Insets
+import javafx.geometry.Pos
 import javafx.scene.Scene
-import javafx.scene.control.Button
 import javafx.scene.control.Label
+import javafx.scene.layout.HBox
 import javafx.scene.layout.Pane
+import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.scene.text.FontWeight
 import javafx.scene.text.TextAlignment
@@ -21,27 +29,34 @@ import java.time.format.DateTimeFormatter
 
 class ErrorWindow(parent: Stage?, private val exception: Throwable, private val onDismiss: Runnable = Runnable {}) {
     private val stage = Stage()
-    private val rootPane = Pane()
-
+    private val rootPane = VBox(15.0).apply {
+        padding = Insets(10.0)
+        alignment = Pos.TOP_CENTER
+    }
+    private val buttonBox = HBox(25.0).apply {
+        alignment = Pos.CENTER
+    }
     private val messageLabel = Label().apply {
-        font = font(FontWeight.BOLD, 14.0)
+        font = font(FontWeight.BOLD, 16.0)
         textFill = Color.RED
         isWrapText = true
         textAlignment = TextAlignment.CENTER
-        prefWidth = 260.0
-        layoutXProperty().bind(rootPane.widthProperty().subtract(widthProperty()).divide(2))
-        layoutY = 10.0
+        maxWidth = Double.MAX_VALUE
         text = "${exception.javaClass.name}: ${exception.message}"
     }
-    private val crashLogButton = Button("Make Crash Log").apply {
+    private val exportButton = object: SpriteButton(GENERIC_RED_BUTTON_SPRITE, GENERIC_RED_BUTTON_PRESSED_SPRITE, 150.0, 30.0) {
+        override fun spriteRenderer(): SpriteRenderer = ExtensibleWidthButtonRenderer(7, 16, 3)
+    }.apply {
         font = font(FontWeight.EXTRA_BOLD, 16.0)
-        layoutXProperty().bind(rootPane.layoutXProperty().add(20))
-        layoutYProperty().bind(messageLabel.heightProperty().add(heightProperty().divide(2)))
+        text = "Export Crash Log"
+        textFill = Color.WHITE
     }
-    private val exitButton = Button("Exit").apply {
+    private val closeButton = object: SpriteButton(GENERIC_RED_BUTTON_SPRITE, GENERIC_RED_BUTTON_PRESSED_SPRITE, 80.0, 30.0) {
+        override fun spriteRenderer(): SpriteRenderer = ExtensibleWidthButtonRenderer(7, 16, 3)
+    }.apply {
         font = font(FontWeight.EXTRA_BOLD, 16.0)
-        layoutXProperty().bind(crashLogButton.layoutXProperty().add(crashLogButton.widthProperty()).add(25))
-        layoutYProperty().bind(messageLabel.heightProperty().add(heightProperty().divide(2)))
+        text = "Close"
+        textFill = Color.WHITE
     }
 
     init {
@@ -52,30 +67,26 @@ class ErrorWindow(parent: Stage?, private val exception: Throwable, private val 
         }
         stage.title = "ERROR"
         stage.isResizable = false
-        stage.width = 280.0
         val screenSize = Toolkit.getDefaultToolkit().screenSize
-        stage.x = (screenSize.getWidth() - stage.width) / 2
-        val mainScene = Scene(rootPane)
-        stage.onShown = { _ ->
-            val height = messageLabel.layoutBounds.height + exitButton.layoutBounds.height
-            val stageInsets = stage.height - mainScene.height
-            stage.height = height + stageInsets + 50
+        stage.onShown = {
+            stage.x = (screenSize.width - stage.width) / 2
             stage.y = (screenSize.height - stage.height) / 2
         }
-        stage.onCloseRequest = { _ -> onDismiss.run() }
-        stage.scene = mainScene
+        stage.onCloseRequest = { _ -> closeButton.fire() }
 
-
-        crashLogButton.onAction = { _ ->
+        exportButton.onAction = { _ ->
             runCatching { logException(exception) }.onFailure { LOGGER.error("Failed to write crash log", it) }
-            exitButton.fire()
+            closeButton.fire()
         }
-        exitButton.onAction = { _ ->
+        closeButton.onAction = { _ ->
             onDismiss.run()
             stage.close()
         }
 
-        rootPane.children.addAll(messageLabel, crashLogButton, exitButton)
+        buttonBox.children.addAll(exportButton, closeButton)
+        rootPane.children.addAll(messageLabel, buttonBox)
+        stage.scene = Scene(rootPane, 350.0, -1.0)
+        stage.sizeToScene()
         stage.show()
     }
 
@@ -96,7 +107,7 @@ class ErrorWindow(parent: Stage?, private val exception: Throwable, private val 
 
     companion object {
         val LOGGER: Logger = LoggerFactory.getLogger("ErrorWindow")
-        private val FILE_NAME_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm-ss-SSS")
+        private val FILE_NAME_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm-ss")
         private val TIMESTAMP_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
     }
 }

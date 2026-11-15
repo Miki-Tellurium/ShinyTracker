@@ -1,14 +1,20 @@
+.root {
+    -fx-background-color: #0A0A2E;
+}
+
 .info-label-header {
-    -fx-background-color: #0052ff;
-    -fx-text-fill: #FAFAFA;
-	-fx-border-color: black;
+    -fx-background-color: #1A1A64;
+    -fx-text-fill: #F5F5F5;
+	-fx-border-color: #2D2D5A;
 	-fx-border-width: 2px;
 	-fx-padding: 2px;
 }
 
 .info-label {
+    -fx-background-color: #1A1A3E;
     -fx-alignment: center-right;
-	-fx-border-color: black black black transparent;
+	-fx-border-color: #2D2D5A #2D2D5A #2D2D5A transparent;
+	-fx-text-fill: #F5F5F5;
 	-fx-border-width: 2px;
 	-fx-padding: 2px;
 }

@@ -21,6 +21,7 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         font = font(FontWeight.BOLD, 40.0)
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2))
         layoutY = 0.0
+        textFill = Color.web("#F5F5F5")
     }
     private val renderBounds = Rectangle().apply {
         layoutY = 55.0
@@ -63,6 +64,7 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
             val size = 70.0 - (text.length * 4)
             font = font(FontWeight.EXTRA_BOLD, size)
         }
+        textFill = Color.web("#F5F5F5")
     }
     private var textCounter = 1
     private val increaseButton = AnimatedButton(INCREASE_BUTTON_SPRITE, INCREASE_BUTTON_PRESSED_SPRITE, 150.0, 75.0).apply {
@@ -108,7 +110,7 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2).subtract(widthProperty().add(40)))
         layoutYProperty().bind(dryStreakTitle.layoutYProperty().add(dryStreakTitle.heightProperty().add(12)))
         text = "Finish"
-        textFill = Color.WHITE
+        textFill = Color.web("#F5F5F5")
         onAction = { _ -> println("Finish") }
     }
     private val pauseButton = object : SpriteButton(GENERIC_BLUE_BUTTON_SPRITE, GENERIC_BLUE_BUTTON_PRESSED_SPRITE, 70.0, 28.0) {
@@ -118,7 +120,7 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2))
         layoutYProperty().bind(dryStreakTitle.layoutYProperty().add(dryStreakTitle.heightProperty().add(12)))
         text = "Pause"
-        textFill = Color.WHITE
+        textFill = Color.web("#F5F5F5")
         onAction = { _ -> println("Pause") }
     }
     private val editButton = object : SpriteButton(GENERIC_BLUE_BUTTON_SPRITE, GENERIC_BLUE_BUTTON_PRESSED_SPRITE, 70.0, 28.0) {
@@ -128,7 +130,7 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2).add(widthProperty().add(40)))
         layoutYProperty().bind(dryStreakTitle.layoutYProperty().add(dryStreakTitle.heightProperty().add(12)))
         text = "Edit"
-        textFill = Color.WHITE
+        textFill = Color.web("#F5F5F5")
         onAction = { _ -> println("Edit") }
     }
 

@@ -1,5 +1,6 @@
 package com.mikitellurium.shinytracker.window
 
+import com.mikitellurium.shinytracker.display.HuntDisplayPane
 import com.mikitellurium.shinytracker.display.NewHuntPane
 import com.mikitellurium.shinytracker.util.*
 import javafx.scene.Scene
@@ -18,7 +19,7 @@ class MainWindow(val mainStage: Stage) {
         val screenBounds = Screen.getPrimary().bounds
         mainStage.x = (screenBounds.width - mainStage.width) / 2
         mainStage.y = (screenBounds.height - mainStage.height) / 2
-        mainStage.scene = Scene(NewHuntPane(this)).apply {
+        mainStage.scene = Scene(HuntDisplayPane(this)).apply {
                 stylesheets.add(CSS_STYLE)
         }
         mainStage.show()

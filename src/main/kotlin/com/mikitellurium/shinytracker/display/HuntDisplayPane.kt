@@ -31,6 +31,19 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         stroke = Color.TRANSPARENT
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2))
     }
+    private val backgroundFade = ImageView(POKEMON_BACKGROUND_FADE).apply{
+        isPreserveRatio = true
+        fitWidth = 220.0
+        fitHeight = 220.0
+        layoutXProperty().bind(Bindings.createDoubleBinding(
+            { renderBounds.layoutX + (renderBounds.width - layoutBounds.width) / 2 },
+            renderBounds.layoutXProperty(), renderBounds.widthProperty(), layoutBoundsProperty()
+        ))
+        layoutYProperty().bind(Bindings.createDoubleBinding(
+            { renderBounds.layoutY + (renderBounds.height - layoutBounds.height) / 2 },
+            renderBounds.layoutYProperty(), renderBounds.heightProperty(), layoutBoundsProperty()
+        ))
+    }
     private val pokemonRender = ImageView().apply {
         isPreserveRatio = true
         // Flatmap re-evaluates width/height when the image changes
@@ -147,7 +160,7 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         counter.text = "0"
         shinyOdds.text = "1/4096"
         dryStreak.text = "100%"
-        children.addAll(pokemonName, renderBounds, pokemonRender, counter, increaseButton, shinyOddsTitle, shinyOdds,
+        children.addAll(backgroundFade, pokemonName, renderBounds, pokemonRender, counter, increaseButton, shinyOddsTitle, shinyOdds,
             dryStreakTitle, dryStreak, finishButton, pauseButton, editButton)
     }
 }

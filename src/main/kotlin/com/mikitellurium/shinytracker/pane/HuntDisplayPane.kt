@@ -26,8 +26,8 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         layoutY = 55.0
         width = 150.0
         height = 148.0
-        fill = Color.LIGHTBLUE
-        stroke = Color.BLACK
+        fill = Color.TRANSPARENT
+        stroke = Color.TRANSPARENT
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2))
     }
     private val pokemonRender = ImageView().apply {
@@ -67,7 +67,7 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
     private var textCounter = 1
     private val increaseButton = AnimatedButton(INCREASE_BUTTON_SPRITE, INCREASE_BUTTON_PRESSED_SPRITE, 150.0, 75.0).apply {
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2))
-        layoutYProperty().bind(counterCenterY.add(35))
+        layoutYProperty().bind(counterCenterY.add(40))
         onAction = { _ ->
             textCounter++
             this@HuntDisplayPane.counter.text = "0".repeat(textCounter)
@@ -92,7 +92,7 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         text = "Dry Streak"
         font = font(FontWeight.BOLD, 20.0)
         styleClass.add("info-label-header")
-        layoutYProperty().bind(shinyOddsTitle.layoutYProperty().add(shinyOdds.heightProperty()).subtract(1))
+        layoutYProperty().bind(shinyOddsTitle.layoutYProperty().add(shinyOddsTitle.heightProperty()).subtract(1))
     }
 
     private val dryStreak = Label().apply {
@@ -105,8 +105,8 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         override fun spriteRenderer(): SpriteRenderer = ExtensibleWidthButtonRenderer(7, 16, 3)
     }.apply {
         font = font(FontWeight.EXTRA_BOLD, 14.0)
-        layoutX = 270.0
-        layoutYProperty().bind(this@HuntDisplayPane.heightProperty().subtract(heightProperty()).subtract(7))
+        layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2).subtract(widthProperty().add(40)))
+        layoutYProperty().bind(dryStreakTitle.layoutYProperty().add(dryStreakTitle.heightProperty().add(12)))
         text = "Finish"
         textFill = Color.WHITE
         onAction = { _ -> println("Finish") }
@@ -115,8 +115,8 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         override fun spriteRenderer(): SpriteRenderer = ExtensibleWidthButtonRenderer(7, 16, 3)
     }.apply {
         font = font(FontWeight.EXTRA_BOLD, 14.0)
-        layoutX = 360.0
-        layoutYProperty().bind(this@HuntDisplayPane.heightProperty().subtract(heightProperty()).subtract(7))
+        layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2))
+        layoutYProperty().bind(dryStreakTitle.layoutYProperty().add(dryStreakTitle.heightProperty().add(12)))
         text = "Pause"
         textFill = Color.WHITE
         onAction = { _ -> println("Pause") }
@@ -125,8 +125,8 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         override fun spriteRenderer(): SpriteRenderer = ExtensibleWidthButtonRenderer(7, 16, 3)
     }.apply {
         font = font(FontWeight.EXTRA_BOLD, 14.0)
-        layoutX = 450.0
-        layoutYProperty().bind(this@HuntDisplayPane.heightProperty().subtract(heightProperty()).subtract(7))
+        layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2).add(widthProperty().add(40)))
+        layoutYProperty().bind(dryStreakTitle.layoutYProperty().add(dryStreakTitle.heightProperty().add(12)))
         text = "Edit"
         textFill = Color.WHITE
         onAction = { _ -> println("Edit") }

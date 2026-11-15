@@ -17,8 +17,8 @@ class MainWindow(
         mainStage.title = APP_NAME
         mainStage.icons.add(Image(WINDOW_ICON))
         mainStage.isResizable = false
-        mainStage.setWidth(800.0)
-        mainStage.setHeight(500.0)
+        mainStage.setWidth(500.0)
+        mainStage.setHeight(520.0)
         val screenBounds = Screen.getPrimary().bounds
         mainStage.x = (screenBounds.width - mainStage.width) / 2
         mainStage.y = (screenBounds.height - mainStage.height) / 2

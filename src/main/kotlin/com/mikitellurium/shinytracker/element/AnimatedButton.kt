@@ -2,6 +2,7 @@ package com.mikitellurium.shinytracker.element
 
 import javafx.animation.Animation
 import javafx.animation.PauseTransition
+import javafx.beans.property.SimpleObjectProperty
 import javafx.event.EventHandler
 import javafx.scene.control.Button
 import javafx.scene.image.Image
@@ -30,7 +31,6 @@ open class AnimatedButton(
         animationTime = PauseTransition(Duration.millis(animationMillis.toDouble()))
         animationTime.onFinished = EventHandler { _ -> background = defaultBg }
         onMousePressed = EventHandler { _ ->
-            this.onMousePressed()
             background = pressedBg
             animationTime.playFromStart()
         }
@@ -41,8 +41,6 @@ open class AnimatedButton(
             background = defaultBg
         }
     }
-
-    open fun onMousePressed() {}
 
     companion object {
         private fun makeBg(img: Image, width: Double, height: Double): Background = Background(

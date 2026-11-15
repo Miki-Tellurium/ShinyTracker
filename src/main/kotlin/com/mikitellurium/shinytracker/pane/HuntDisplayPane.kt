@@ -64,15 +64,14 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
             font = font(FontWeight.EXTRA_BOLD, size)
         }
     }
-    private val increaseButton = object : AnimatedButton(INCREASE_BUTTON_SPRITE, INCREASE_BUTTON_PRESSED_SPRITE, 150.0, 75.0) {
-        private var counter = 1
-        override fun onMousePressed() {
-            counter++
-            this@HuntDisplayPane.counter.text = "0".repeat(counter)
-        }
-    }.apply {
+    private var textCounter = 1
+    private val increaseButton = AnimatedButton(INCREASE_BUTTON_SPRITE, INCREASE_BUTTON_PRESSED_SPRITE, 150.0, 75.0).apply {
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2))
         layoutYProperty().bind(counterCenterY.add(35))
+        onAction = { _ ->
+            textCounter++
+            this@HuntDisplayPane.counter.text = "0".repeat(textCounter)
+        }
     }
 
     private val shinyOddsTitle = Label().apply {
@@ -104,10 +103,6 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         layoutYProperty().bind(shinyOddsTitle.layoutYProperty().add(shinyOdds.heightProperty()).subtract(1))
     }
     private val finishButton = object : SpriteButton(GENERIC_BLUE_BUTTON_SPRITE, GENERIC_BLUE_BUTTON_PRESSED_SPRITE, 70.0, 28.0) {
-        override fun onMousePressed() {
-            println("Finish")
-        }
-
         override fun spriteRenderer(): SpriteRenderer = ExtensibleWidthButtonRenderer(7, 16, 3)
     }.apply {
         font = font(FontWeight.EXTRA_BOLD, 14.0)
@@ -115,12 +110,9 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         layoutYProperty().bind(this@HuntDisplayPane.heightProperty().subtract(heightProperty()).subtract(7))
         text = "Finish"
         textFill = Color.WHITE
+        onAction = { _ -> println("Finish") }
     }
     private val pauseButton = object : SpriteButton(GENERIC_BLUE_BUTTON_SPRITE, GENERIC_BLUE_BUTTON_PRESSED_SPRITE, 70.0, 28.0) {
-        override fun onMousePressed() {
-            println("Pause")
-        }
-
         override fun spriteRenderer(): SpriteRenderer = ExtensibleWidthButtonRenderer(7, 16, 3)
     }.apply {
         font = font(FontWeight.EXTRA_BOLD, 14.0)
@@ -128,12 +120,9 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         layoutYProperty().bind(this@HuntDisplayPane.heightProperty().subtract(heightProperty()).subtract(7))
         text = "Pause"
         textFill = Color.WHITE
+        onAction = { _ -> println("Pause") }
     }
     private val editButton = object : SpriteButton(GENERIC_BLUE_BUTTON_SPRITE, GENERIC_BLUE_BUTTON_PRESSED_SPRITE, 70.0, 28.0) {
-        override fun onMousePressed() {
-            println("Edit")
-        }
-
         override fun spriteRenderer(): SpriteRenderer = ExtensibleWidthButtonRenderer(7, 16, 3)
     }.apply {
         font = font(FontWeight.EXTRA_BOLD, 14.0)
@@ -141,6 +130,7 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         layoutYProperty().bind(this@HuntDisplayPane.heightProperty().subtract(heightProperty()).subtract(7))
         text = "Edit"
         textFill = Color.WHITE
+        onAction = { _ -> println("Edit") }
     }
 
     init {

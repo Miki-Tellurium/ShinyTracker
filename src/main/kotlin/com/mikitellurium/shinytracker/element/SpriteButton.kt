@@ -34,7 +34,6 @@ abstract class SpriteButton(
         animationTime = PauseTransition(Duration.millis(animationMillis.toDouble()))
         animationTime.onFinished = EventHandler { _ -> spriteProperty.set(defaultSprite) }
         onMousePressed = EventHandler { _ ->
-            this.onMousePressed()
             spriteProperty.set(pressedSprite)
             animationTime.playFromStart()
         }
@@ -45,8 +44,6 @@ abstract class SpriteButton(
             spriteProperty.set(defaultSprite)
         }
     }
-
-    open fun onMousePressed() {}
 
     abstract fun spriteRenderer(): SpriteRenderer
 

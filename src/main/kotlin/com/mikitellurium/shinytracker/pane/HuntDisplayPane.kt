@@ -73,7 +73,6 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
             this@HuntDisplayPane.counter.text = "0".repeat(textCounter)
         }
     }
-
     private val shinyOddsTitle = Label().apply {
         prefWidth = 120.0
         text = "Odds"

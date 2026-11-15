@@ -7,7 +7,6 @@ import javafx.scene.image.Image
 const val APP_NAME = "Shiny Tracker"
 const val APP_VERSION = "0.1-beta"
 const val WINDOW_ICON = "/sprites/pokeball_logo.png"
-const val FONT_DEFAULT = "Arial"
 const val CSS_STYLE = "style.css"
 
 // Sprites

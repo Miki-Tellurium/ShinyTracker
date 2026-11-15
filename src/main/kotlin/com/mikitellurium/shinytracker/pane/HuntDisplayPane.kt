@@ -4,28 +4,21 @@ import com.mikitellurium.shinytracker.element.AnimatedButton
 import com.mikitellurium.shinytracker.element.ExtensibleWidthButtonRenderer
 import com.mikitellurium.shinytracker.element.SpriteButton
 import com.mikitellurium.shinytracker.element.SpriteRenderer
-import com.mikitellurium.shinytracker.util.FONT_DEFAULT
-import com.mikitellurium.shinytracker.util.GENERIC_BUTTON_PRESSED_SPRITE
-import com.mikitellurium.shinytracker.util.GENERIC_BUTTON_SPRITE
-import com.mikitellurium.shinytracker.util.INCREASE_BUTTON_PRESSED_SPRITE
-import com.mikitellurium.shinytracker.util.INCREASE_BUTTON_SPRITE
-import com.mikitellurium.shinytracker.util.TEST_BUTTON_SPRITE
+import com.mikitellurium.shinytracker.util.*
 import com.mikitellurium.shinytracker.window.MainWindow
 import javafx.beans.binding.Bindings
-import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
-import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 
 
 class HuntDisplayPane(val parent: MainWindow): Pane() {
     private val pokemonName = Label().apply {
-        font = Font.font(FONT_DEFAULT, FontWeight.BOLD, 40.0)
+        font = font(FontWeight.BOLD, 40.0)
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2))
         layoutY = 0.0
     }
@@ -68,10 +61,9 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         layoutYProperty().bind(counterCenterY.subtract(heightProperty().divide(2)))
         textProperty().addListener { _, _, _ ->
             val size = 70.0 - (text.length * 4)
-            font = Font.font(FONT_DEFAULT, FontWeight.EXTRA_BOLD, size)
+            font = font(FontWeight.EXTRA_BOLD, size)
         }
     }
-
     private val increaseButton = object : AnimatedButton(INCREASE_BUTTON_SPRITE, INCREASE_BUTTON_PRESSED_SPRITE, 150.0, 75.0) {
         private var counter = 1
         override fun onMousePressed() {
@@ -86,13 +78,13 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
     private val shinyOddsTitle = Label().apply {
         prefWidth = 120.0
         text = "Odds"
-        font = Font.font(FONT_DEFAULT, FontWeight.BOLD, 20.0)
+        font = font(FontWeight.BOLD, 20.0)
         styleClass.add("info-label-header")
         layoutYProperty().bind(increaseButton.layoutYProperty().add(increaseButton.heightProperty()).add(10))
     }
     private val shinyOdds = Label().apply {
         prefWidth = 180.0
-        font = Font.font(FONT_DEFAULT, FontWeight.BOLD, 20.0)
+        font = font(FontWeight.BOLD, 20.0)
         styleClass.add("info-label")
         layoutYProperty().bind(increaseButton.layoutYProperty().add(increaseButton.heightProperty()).add(10))
     }
@@ -100,14 +92,14 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
     private val dryStreakTitle = Label().apply {
         prefWidth = 120.0
         text = "Dry Streak"
-        font = Font.font(FONT_DEFAULT, FontWeight.BOLD, 20.0)
+        font = font(FontWeight.BOLD, 20.0)
         styleClass.add("info-label-header")
         layoutYProperty().bind(shinyOddsTitle.layoutYProperty().add(shinyOdds.heightProperty()).subtract(1))
     }
 
     private val dryStreak = Label().apply {
         prefWidth = 180.0
-        font = Font.font(FONT_DEFAULT, FontWeight.BOLD, 20.0)
+        font = font(FontWeight.BOLD, 20.0)
         styleClass.add("info-label")
         layoutYProperty().bind(shinyOddsTitle.layoutYProperty().add(shinyOdds.heightProperty()).subtract(1))
     }
@@ -118,7 +110,7 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
 
         override fun spriteRenderer(): SpriteRenderer = ExtensibleWidthButtonRenderer(7, 16, 3)
     }.apply {
-        font = Font.font(FONT_DEFAULT, FontWeight.EXTRA_BOLD, 14.0)
+        font = font(FontWeight.EXTRA_BOLD, 14.0)
         layoutX = 270.0
         layoutYProperty().bind(this@HuntDisplayPane.heightProperty().subtract(heightProperty()).subtract(7))
         text = "Finish"
@@ -131,7 +123,7 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
 
         override fun spriteRenderer(): SpriteRenderer = ExtensibleWidthButtonRenderer(7, 16, 3)
     }.apply {
-        font = Font.font(FONT_DEFAULT, FontWeight.EXTRA_BOLD, 14.0)
+        font = font(FontWeight.EXTRA_BOLD, 14.0)
         layoutX = 360.0
         layoutYProperty().bind(this@HuntDisplayPane.heightProperty().subtract(heightProperty()).subtract(7))
         text = "Pause"
@@ -144,7 +136,7 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
 
         override fun spriteRenderer(): SpriteRenderer = ExtensibleWidthButtonRenderer(7, 16, 3)
     }.apply {
-        font = Font.font(FONT_DEFAULT, FontWeight.EXTRA_BOLD, 14.0)
+        font = font(FontWeight.EXTRA_BOLD, 14.0)
         layoutX = 450.0
         layoutYProperty().bind(this@HuntDisplayPane.heightProperty().subtract(heightProperty()).subtract(7))
         text = "Edit"

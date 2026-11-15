@@ -1,6 +1,6 @@
 package com.mikitellurium.shinytracker.window
 
-import com.mikitellurium.shinytracker.pane.NewHuntPane
+import com.mikitellurium.shinytracker.display.NewHuntPane
 import com.mikitellurium.shinytracker.util.*
 import javafx.scene.Scene
 import javafx.scene.image.Image

@@ -1,4 +1,4 @@
-package com.mikitellurium.shinytracker.pane
+package com.mikitellurium.shinytracker.display
 
 import com.mikitellurium.shinytracker.element.AnimatedButton
 import com.mikitellurium.shinytracker.util.APP_VERSION

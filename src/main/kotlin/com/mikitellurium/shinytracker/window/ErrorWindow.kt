@@ -11,16 +11,15 @@ import javafx.geometry.Pos
 import javafx.scene.Scene
 import javafx.scene.control.Label
 import javafx.scene.layout.HBox
-import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.scene.text.FontWeight
 import javafx.scene.text.TextAlignment
 import javafx.stage.Modality
+import javafx.stage.Screen
 import javafx.stage.Stage
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.awt.Toolkit
 import java.io.FileWriter
 import java.io.PrintWriter
 import java.time.LocalDateTime
@@ -67,10 +66,10 @@ class ErrorWindow(parent: Stage?, private val exception: Throwable, private val 
         }
         stage.title = "ERROR"
         stage.isResizable = false
-        val screenSize = Toolkit.getDefaultToolkit().screenSize
+        val screenBounds = Screen.getPrimary().bounds
         stage.onShown = {
-            stage.x = (screenSize.width - stage.width) / 2
-            stage.y = (screenSize.height - stage.height) / 2
+            stage.x = (screenBounds.width - stage.width) / 2
+            stage.y = (screenBounds.height - stage.height) / 2
         }
         stage.onCloseRequest = { _ -> closeButton.fire() }
 

@@ -103,7 +103,7 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         styleClass.add("info-label")
         layoutYProperty().bind(shinyOddsTitle.layoutYProperty().add(shinyOdds.heightProperty()).subtract(1))
     }
-    private val finishButton = object : SpriteButton(GENERIC_BUTTON_SPRITE, GENERIC_BUTTON_PRESSED_SPRITE, 70.0, 28.0) {
+    private val finishButton = object : SpriteButton(GENERIC_BLUE_BUTTON_SPRITE, GENERIC_BLUE_BUTTON_PRESSED_SPRITE, 70.0, 28.0) {
         override fun onMousePressed() {
             println("Finish")
         }
@@ -116,7 +116,7 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         text = "Finish"
         textFill = Color.WHITE
     }
-    private val pauseButton = object : SpriteButton(GENERIC_BUTTON_SPRITE, GENERIC_BUTTON_PRESSED_SPRITE, 70.0, 28.0) {
+    private val pauseButton = object : SpriteButton(GENERIC_BLUE_BUTTON_SPRITE, GENERIC_BLUE_BUTTON_PRESSED_SPRITE, 70.0, 28.0) {
         override fun onMousePressed() {
             println("Pause")
         }
@@ -129,7 +129,7 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         text = "Pause"
         textFill = Color.WHITE
     }
-    private val editButton = object : SpriteButton(GENERIC_BUTTON_SPRITE, GENERIC_BUTTON_PRESSED_SPRITE, 70.0, 28.0) {
+    private val editButton = object : SpriteButton(GENERIC_BLUE_BUTTON_SPRITE, GENERIC_BLUE_BUTTON_PRESSED_SPRITE, 70.0, 28.0) {
         override fun onMousePressed() {
             println("Edit")
         }

@@ -20,6 +20,7 @@ import javafx.stage.Screen
 import javafx.stage.Stage
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.io.File
 import java.io.FileWriter
 import java.io.PrintWriter
 import java.time.LocalDateTime
@@ -91,7 +92,7 @@ class ErrorWindow(parent: Stage?, private val exception: Throwable, private val 
 
     private fun logException(throwable: Throwable) {
         val now = LocalDateTime.now()
-        FileWriter("crash_log_${now.format(FILE_NAME_FORMAT)}.txt", Charsets.UTF_8).use { fw ->
+        FileWriter(File("/out/logs/crash_log_${now.format(FILE_NAME_FORMAT)}.txt"), Charsets.UTF_8).use { fw ->
             PrintWriter(fw).use { pw ->
                 val timestamp = now.format(TIMESTAMP_FORMAT)
 

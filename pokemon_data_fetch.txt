@@ -1,0 +1,7 @@
+list of species -> species ->
+-generation
+list of varieties -> Pokémon
+-> list of forms -> form
+-name
+-#is_battle_only
+-types

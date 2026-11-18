@@ -1,6 +1,7 @@
 package com.mikitellurium.shinytracker
 
 import com.mikitellurium.shinytracker.window.ErrorWindow
+import com.mikitellurium.shinytracker.window.HuntSettingsWindow
 import com.mikitellurium.shinytracker.window.MainWindow
 import javafx.application.Application
 import javafx.application.Platform
@@ -36,7 +37,8 @@ class MainKt {
             Thread.currentThread().uncaughtExceptionHandler = handler
 
             try {
-                MainWindow(stage)
+                //MainWindow(stage)
+                HuntSettingsWindow(stage)
             } catch (t: Throwable) {
                 handler.uncaughtException(Thread.currentThread(), t)
             }

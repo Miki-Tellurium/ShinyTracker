@@ -9,6 +9,8 @@ interface SpriteRenderer {
      * @param img The image to be rendered
      * @param w The canvas width
      * @param h The canvas height
+     * @param sw The original sprite width in pixels
+     * @param sw The original sprite height in pixels
      */
-    fun render(g: GraphicsContext, img: Image, w: Double, h: Double)
+    fun render(g: GraphicsContext, img: Image, w: Double, h: Double, sw: Int, sh: Int)
 }

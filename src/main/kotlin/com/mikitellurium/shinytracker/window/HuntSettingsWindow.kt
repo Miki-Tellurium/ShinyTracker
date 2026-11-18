@@ -3,11 +3,8 @@ package com.mikitellurium.shinytracker.window
 import com.mikitellurium.shinytracker.element.ExtensibleWidthButtonRenderer
 import com.mikitellurium.shinytracker.element.IntField
 import com.mikitellurium.shinytracker.element.SpriteButton
-import com.mikitellurium.shinytracker.element.SpriteRenderer
-import com.mikitellurium.shinytracker.util.GENERIC_BLUE_BUTTON_PRESSED_SPRITE
-import com.mikitellurium.shinytracker.util.GENERIC_BLUE_BUTTON_SPRITE
-import com.mikitellurium.shinytracker.util.GENERIC_RED_BUTTON_PRESSED_SPRITE
-import com.mikitellurium.shinytracker.util.GENERIC_RED_BUTTON_SPRITE
+import com.mikitellurium.shinytracker.util.GENERIC_BLUE_BUTTON
+import com.mikitellurium.shinytracker.util.GENERIC_RED_BUTTON
 import com.mikitellurium.shinytracker.util.font
 import javafx.geometry.Insets
 import javafx.geometry.Pos
@@ -114,16 +111,12 @@ class HuntSettingsWindow(parent: Stage) {
         GridPane.setMargin(this, Insets(5.0, 0.0, 0.0, 0.0))
         alignment = Pos.CENTER
     }
-    private val confirmButton = object: SpriteButton(GENERIC_BLUE_BUTTON_SPRITE, GENERIC_BLUE_BUTTON_PRESSED_SPRITE, 80.0, 30.0) {
-        override fun spriteRenderer(): SpriteRenderer = ExtensibleWidthButtonRenderer(7, 16, 3)
-    }.apply {
+    private val confirmButton = SpriteButton(GENERIC_BLUE_BUTTON, ExtensibleWidthButtonRenderer(3), 80.0, 30.0).apply {
         font = font(FontWeight.EXTRA_BOLD, 16.0)
         text = "Confirm"
         textFill = Color.WHITE
     }
-    private val closeButton = object: SpriteButton(GENERIC_RED_BUTTON_SPRITE, GENERIC_RED_BUTTON_PRESSED_SPRITE, 80.0, 30.0) {
-        override fun spriteRenderer(): SpriteRenderer = ExtensibleWidthButtonRenderer(7, 16, 3)
-    }.apply {
+    private val closeButton = SpriteButton(GENERIC_RED_BUTTON, ExtensibleWidthButtonRenderer(3), 80.0, 30.0).apply {
         font = font(FontWeight.EXTRA_BOLD, 16.0)
         text = "Close"
         textFill = Color.WHITE

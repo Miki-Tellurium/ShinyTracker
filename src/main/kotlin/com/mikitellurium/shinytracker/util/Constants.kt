@@ -10,14 +10,30 @@ const val WINDOW_ICON = "/sprites/pokeball_logo.png"
 const val CSS_STYLE = "style.css"
 
 // Sprites
-val NEW_HUNT_BUTTON_SPRITE = Image("/sprites/button/new_hunt_button.png", 320.0, 320.0, true, false)
-val NEW_HUNT_BUTTON_PRESSED_SPRITE = Image("/sprites/button/new_hunt_button_pressed.png", 320.0, 320.0, true, false)
-val INCREASE_BUTTON_SPRITE = Image("/sprites/button/increase_button.png", 640.0, 320.0, true, false)
-val INCREASE_BUTTON_PRESSED_SPRITE = Image("/sprites/button/increase_button_pressed.png", 640.0, 320.0, true, false)
-val GENERIC_BLUE_BUTTON_SPRITE = Image("/sprites/button/generic_blue_button.png", 70.0, 160.0, true, false)
-val GENERIC_BLUE_BUTTON_PRESSED_SPRITE = Image("/sprites/button/generic_blue_button_pressed.png", 70.0, 160.0, true, false)
-val GENERIC_RED_BUTTON_SPRITE = Image("/sprites/button/generic_red_button.png", 70.0, 160.0, true, false)
-val GENERIC_RED_BUTTON_PRESSED_SPRITE = Image("/sprites/button/generic_red_button_pressed.png", 70.0, 160.0, true, false)
+val NEW_HUNT_BUTTON = sprite(
+    "/sprites/button/new_hunt_button.png",
+    "/sprites/button/new_hunt_button_pressed.png",
+    32, 32
+)
+
+val INCREASE_BUTTON = sprite(
+    "/sprites/button/increase_button.png",
+    "/sprites/button/increase_button_pressed.png",
+    64, 32
+)
+
+val GENERIC_BLUE_BUTTON = sprite(
+    "/sprites/button/generic_blue_button.png",
+    "/sprites/button/generic_blue_button_pressed.png",
+    7, 16
+)
+
+val GENERIC_RED_BUTTON = sprite(
+    "/sprites/button/generic_red_button.png",
+    "/sprites/button/generic_red_button_pressed.png",
+    7, 16
+)
+
 val MISSING_NO_SPRITE = Image("/sprites/missing_no.png")
 val POKEMON_BACKGROUND_FADE = Image("/sprites/pokemon_background_fade.png", 512.0, 512.0, true, false)
 

@@ -38,7 +38,7 @@ class SpriteButtonSkin(private val btn: SpriteButton): ButtonSkin(btn) {
 
         val img = btn.spriteProperty.value
 
-        btn.spriteRenderer().render(g, img, w, h)
+        btn.renderer.render(g, img, w, h, btn.sprite.width, btn.sprite.height)
     }
 
     override fun dispose() {

@@ -2,7 +2,6 @@ package com.mikitellurium.shinytracker.element
 
 import javafx.animation.Animation
 import javafx.animation.PauseTransition
-import javafx.beans.property.SimpleObjectProperty
 import javafx.event.EventHandler
 import javafx.scene.control.Button
 import javafx.scene.image.Image
@@ -14,15 +13,14 @@ import javafx.scene.layout.BackgroundSize
 import javafx.util.Duration
 
 
-open class AnimatedButton(
-    defaultSprite: Image,
-    pressedSprite: Image,
-    width: Double = defaultSprite.width,
-    height: Double = defaultSprite.height,
+class AnimatedButton(
+    sprite: BiStateSprite,
+    width: Double = sprite.width.toDouble(),
+    height: Double = sprite.height.toDouble(),
     animationMillis: Int = 100
 ) : Button() {
-    private val defaultBg = makeBg(defaultSprite, width, height)
-    private val pressedBg = makeBg(pressedSprite, width, height)
+    private val defaultBg = makeBg(sprite.default, width, height)
+    private val pressedBg = makeBg(sprite.pressed, width, height)
     private val animationTime: PauseTransition
 
     init {

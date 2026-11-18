@@ -12,11 +12,11 @@ import javafx.scene.layout.Background
 import javafx.scene.layout.Border
 import javafx.util.Duration
 
-abstract class SpriteButton(
-    val defaultSprite: Image,
-    val pressedSprite: Image,
-    width: Double = defaultSprite.width,
-    height: Double = defaultSprite.height,
+class SpriteButton(
+    val sprite: BiStateSprite,
+    val renderer: SpriteRenderer,
+    width: Double = sprite.width.toDouble(),
+    height: Double = sprite.height.toDouble(),
     animationMillis: Int = 100
 ) : Button() {
     private val animationTime: PauseTransition
@@ -30,22 +30,20 @@ abstract class SpriteButton(
         border = Border.EMPTY
         padding = Insets.EMPTY
         isFocusTraversable = false
-        spriteProperty.set(defaultSprite)
+        spriteProperty.set(sprite.default)
         animationTime = PauseTransition(Duration.millis(animationMillis.toDouble()))
-        animationTime.onFinished = EventHandler { _ -> spriteProperty.set(defaultSprite) }
+        animationTime.onFinished = EventHandler { _ -> spriteProperty.set(sprite.default) }
         onMousePressed = EventHandler { _ ->
-            spriteProperty.set(pressedSprite)
+            spriteProperty.set(sprite.pressed)
             animationTime.playFromStart()
         }
         onMouseReleased = EventHandler { _ ->
             if (animationTime.status == Animation.Status.RUNNING) {
                 animationTime.stop()
             }
-            spriteProperty.set(defaultSprite)
+            spriteProperty.set(sprite.default)
         }
     }
-
-    abstract fun spriteRenderer(): SpriteRenderer
 
     override fun createDefaultSkin(): Skin<*> = SpriteButtonSkin(this)
 }

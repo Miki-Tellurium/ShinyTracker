@@ -33,9 +33,10 @@ val GENERIC_RED_BUTTON = sprite(
     "/sprites/button/generic_red_button_pressed.png",
     7, 16
 )
-
 val MISSING_NO_SPRITE = Image("/sprites/missing_no.png")
 val POKEMON_BACKGROUND_FADE = Image("/sprites/pokemon_background_fade.png", 512.0, 512.0, true, false)
 
-//Debug
+// Data
+const val POKEMON_DATA = "/data/pokemons.json"
+// Debug
 val TEST_BUTTON_SPRITE = Image("/sprites/button/test_button.png", 70.0, 160.0, true, false)

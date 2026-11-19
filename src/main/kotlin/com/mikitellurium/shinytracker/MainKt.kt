@@ -1,5 +1,6 @@
 package com.mikitellurium.shinytracker
 
+import com.mikitellurium.shinytracker.data.PokemonData
 import com.mikitellurium.shinytracker.window.ErrorWindow
 import com.mikitellurium.shinytracker.window.HuntSettingsWindow
 import com.mikitellurium.shinytracker.window.MainWindow
@@ -38,6 +39,7 @@ class MainKt {
 
             try {
                 //MainWindow(stage)
+                PokemonData.initialize()
                 HuntSettingsWindow(stage)
             } catch (t: Throwable) {
                 handler.uncaughtException(Thread.currentThread(), t)

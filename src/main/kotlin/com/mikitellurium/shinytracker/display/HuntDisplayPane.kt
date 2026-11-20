@@ -162,9 +162,9 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
         text = "Edit"
         textFill = Color.web("#F5F5F5")
         onAction = { _ ->
-            HuntSettingsWindow(this@HuntDisplayPane.parent.mainStage) {
+            HuntSettingsWindow(this@HuntDisplayPane.parent.mainStage, true) {
                 this@HuntDisplayPane.shinyHunt = it
-            }.apply { set(shinyHunt.pokemon, shinyHunt.rolls, shinyHunt.baseOdds) }
+            }.apply { set(shinyHunt.pokemon, shinyHunt.rolls, shinyHunt.baseOdds, shinyHunt.attempts) }
         }
     }
 

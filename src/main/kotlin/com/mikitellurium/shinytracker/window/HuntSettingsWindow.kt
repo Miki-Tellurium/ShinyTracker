@@ -30,7 +30,7 @@ import kotlin.math.min
 /**
  * @param onClose Function passed by the parent to read the values: 1) Pokémon 2) rolls 3) base odds
  */
-class HuntSettingsWindow(parent: Stage, onClose: (ShinyHunt) -> Unit) {
+class HuntSettingsWindow(parent: Stage, isEdit: Boolean = false, onClose: (ShinyHunt) -> Unit) {
     val stage = Stage()
     val rootPane = GridPane().apply {
         padding = Insets(5.0)
@@ -79,7 +79,7 @@ class HuntSettingsWindow(parent: Stage, onClose: (ShinyHunt) -> Unit) {
         GridPane.setConstraints(this, 0, 2)
         text = "Rolls"
     }
-    private val rollsField = IntField(maxValue = Short.MAX_VALUE.toInt()).apply {
+    private val rollsField = IntField(minValue = 1, maxValue = Short.MAX_VALUE.toInt()).apply {
         font = font(FontWeight.BOLD, 14.0)
         GridPane.setConstraints(this, 0, 3)
         GridPane.setMargin(this, Insets(-5.0, 0.0, 0.0, 0.0))
@@ -88,7 +88,6 @@ class HuntSettingsWindow(parent: Stage, onClose: (ShinyHunt) -> Unit) {
         promptText = "Rolls"
         text = "1"
         isFocusTraversable = false
-        onInputMethodTextChanged
     }
     private val separator = Label().apply {
         font = font(FontWeight.EXTRA_BOLD, 22.0)
@@ -137,6 +136,21 @@ class HuntSettingsWindow(parent: Stage, onClose: (ShinyHunt) -> Unit) {
             font = font(FontWeight.BOLD, 14.0)
         }
     }
+    private val attemptsText = Label().apply {
+        font = font(FontWeight.BOLD, 18.0)
+        GridPane.setConstraints(this, 0, 4)
+        text = "Attempts"
+    }
+    private val attemptsField = IntField().apply {
+        font = font(FontWeight.BOLD, 14.0)
+        GridPane.setConstraints(this, 0, 5)
+        GridPane.setMargin(this, Insets(-5.0, 0.0, 0.0, 0.0))
+        prefWidth = 40.0
+        padding = Insets(2.0, 0.0, 2.0, 4.0)
+        promptText = "Attempts"
+        text = "0"
+        isFocusTraversable = false
+    }
     private val buttonBox = HBox(40.0).apply {
         GridPane.setConstraints(this, 0, 4)
         GridPane.setColumnSpan(this, 3)
@@ -148,7 +162,7 @@ class HuntSettingsWindow(parent: Stage, onClose: (ShinyHunt) -> Unit) {
         text = "Confirm"
         textFill = Color.WHITE
         onAction = {
-            onClose.invoke(ShinyHunt(pokemon, rollsField.value(), oddsSelector.value))
+            onClose.invoke(ShinyHunt(pokemon, rollsField.value(), oddsSelector.value, attemptsField.value()))
             stage.close()
         }
     }
@@ -205,17 +219,21 @@ class HuntSettingsWindow(parent: Stage, onClose: (ShinyHunt) -> Unit) {
         buttonBox.children.addAll(confirmButton, closeButton)
         rootPane.children.addAll(pokemonName, pokemonSearch, rollsText, rollsField, separator,
             oddsText, oddsSelector, buttonBox)
+        if (isEdit) {
+            rootPane.children.addAll(attemptsText, attemptsField)
+            GridPane.setConstraints(buttonBox, 0, 6)
+        }
         stage.scene = Scene(rootPane)
         stage.show()
     }
 
-    fun set(mon: Pokemon, rolls: Int = 1, baseOdds: Int = 4096) {
+    fun set(mon: Pokemon, rolls: Int = 1, baseOdds: Int = 4096, attempts: Int = 0) {
         firstEdit = true
         pokemon = mon
-        pokemonSearch.text = pokemon.displayName()
+        pokemonSearch.text = if (pokemon == NONE) "" else pokemon.displayName()
         rollsField.setValue(rolls)
-        if (baseOdds == 4096  || baseOdds == 8192) {
-            oddsSelector.value = baseOdds
-        } else throw IllegalArgumentException("Invalid base odds value, only 4096 or 8192 allowed")
+        attemptsField.setValue(attempts)
+        if (baseOdds == 4096  || baseOdds == 8192) oddsSelector.value = baseOdds
+        else throw IllegalArgumentException("Invalid base odds value, only 4096 or 8192 allowed")
     }
 }

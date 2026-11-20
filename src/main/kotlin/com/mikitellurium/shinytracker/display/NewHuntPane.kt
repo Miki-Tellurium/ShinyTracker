@@ -34,8 +34,7 @@ class NewHuntPane(private val parent: MainWindow): Pane() {
         layoutY = 140.0
         onAction = { HuntSettingsWindow(this@NewHuntPane.parent.mainStage) {
             this@NewHuntPane.parent.setShinyHunt(it)
-        }
-        }
+        } }
     }
 
     init {

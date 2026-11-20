@@ -17,13 +17,12 @@ class IntField(val minValue: Int = 0, val maxValue: Int = Int.MAX_VALUE, val def
             when {
                 newText.isEmpty() -> change                              // allow clearing
                 !newText.all { it.isDigit() } -> null                    // digits only
-                newText.length > maxValue.toString().length -> null
                 newText.toLongOrNull()?.let { it <= maxValue } == true -> change
                 else -> null
             }
-        }.apply {
-            textFormatter = this
         }
+        textFormatter = formatter
+
         // Commit on lost focus
         focusedProperty().addListener { _, _, focused ->
             if (!focused) commit()
@@ -38,5 +37,9 @@ class IntField(val minValue: Int = 0, val maxValue: Int = Int.MAX_VALUE, val def
         text = value.toString()
     }
 
-    fun value(): Int = formatter.value
+    fun value(): Int = text.toIntOrNull()?.coerceIn(minValue, maxValue) ?: formatter.value
+    fun setValue(value: Int) {
+        formatter.value = value.coerceIn(minValue, maxValue)
+        text = formatter.value.toString()
+    }
 }

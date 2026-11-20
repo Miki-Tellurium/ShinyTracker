@@ -2,13 +2,17 @@ package com.mikitellurium.shinytracker.display
 
 import com.mikitellurium.shinytracker.LOGGER
 import com.mikitellurium.shinytracker.data.NONE
+import com.mikitellurium.shinytracker.data.Pokemon
 import com.mikitellurium.shinytracker.data.ShinyHunt
 import com.mikitellurium.shinytracker.element.AnimatedButton
 import com.mikitellurium.shinytracker.element.ExtensibleWidthButtonRenderer
 import com.mikitellurium.shinytracker.element.SpriteButton
 import com.mikitellurium.shinytracker.util.*
+import com.mikitellurium.shinytracker.window.HuntSettingsWindow
 import com.mikitellurium.shinytracker.window.MainWindow
 import javafx.beans.binding.Bindings
+import javafx.beans.property.SimpleObjectProperty
+import javafx.beans.value.ObservableValue
 import javafx.scene.control.Label
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
@@ -16,17 +20,24 @@ import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.text.FontWeight
-import java.lang.String
 import java.util.*
 import kotlin.IllegalArgumentException
 import kotlin.apply
 import kotlin.text.format
 
 
-class HuntDisplayPane(val parent: MainWindow, val shinyHunt: ShinyHunt): Pane() {
+class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
+    private val huntProperty = SimpleObjectProperty(initialHunt)
+    var shinyHunt: ShinyHunt
+        get() = huntProperty.get()
+        set(value) = huntProperty.set(value)
+    // Re-targets automatically whenever the hunt is swapped
+    private val counterObservable: ObservableValue<Number> = huntProperty.flatMap { it.counterProperty }
+
     private val pokemonName = Label().apply {
         font = font(FontWeight.BOLD, 40.0)
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2))
+        textProperty().bind(huntProperty.map { it.pokemon.displayName() })
         layoutY = 0.0
         textFill = Color.web("#F5F5F5")
     }
@@ -81,8 +92,9 @@ class HuntDisplayPane(val parent: MainWindow, val shinyHunt: ShinyHunt): Pane() 
         font = font(FontWeight.EXTRA_BOLD, 66.0)
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2))
         layoutYProperty().bind(counterCenterY.subtract(heightProperty().divide(2)))
-        val binding = Bindings.createStringBinding({ shinyHunt.attempts.toString() }, shinyHunt.counterProperty)
-        textProperty().bind(binding)
+        textProperty().bind(Bindings.createStringBinding(
+            { counterObservable.value.toString() }, counterObservable
+        ))
         textProperty().addListener { _, _, _ ->
             val size = 70.0 - (text.length * 4)
             font = font(FontWeight.EXTRA_BOLD, size)
@@ -106,12 +118,10 @@ class HuntDisplayPane(val parent: MainWindow, val shinyHunt: ShinyHunt): Pane() 
         font = font(FontWeight.BOLD, 20.0)
         styleClass.add("info-label")
         layoutYProperty().bind(increaseButton.layoutYProperty().add(increaseButton.heightProperty()).add(10))
-        val textBinding = Bindings.createStringBinding({
-            "1/${shinyHunt.chance()}"
-        }, shinyHunt.counterProperty)
-        textProperty().bind(textBinding)
+        textProperty().bind(Bindings.createStringBinding(
+            { "1/${shinyHunt.chance()}" }, counterObservable
+        ))
     }
-
     private val dryStreakTitle = Label().apply {
         prefWidth = 120.0
         text = "Dry Streak"
@@ -119,17 +129,15 @@ class HuntDisplayPane(val parent: MainWindow, val shinyHunt: ShinyHunt): Pane() 
         styleClass.add("info-label-header")
         layoutYProperty().bind(shinyOddsTitle.layoutYProperty().add(shinyOddsTitle.heightProperty()).subtract(1))
     }
-
     private val dryStreak = Label().apply {
         prefWidth = 180.0
         font = font(FontWeight.BOLD, 20.0)
         styleClass.add("info-label")
         layoutYProperty().bind(shinyOddsTitle.layoutYProperty().add(shinyOdds.heightProperty()).subtract(1))
-        val binding = Bindings.createStringBinding({
+        textProperty().bind(Bindings.createStringBinding({
             val p = shinyHunt.geometricDistribution()
             "${"%.3f".format(Locale.ROOT, p)}%"
-        }, shinyHunt.counterProperty)
-        textProperty().bind(binding)
+        }, counterObservable))
     }
     private val finishButton = SpriteButton(GENERIC_BLUE_BUTTON, ExtensibleWidthButtonRenderer(3), 70.0, 28.0).apply {
         font = font(FontWeight.EXTRA_BOLD, 14.0)
@@ -137,7 +145,7 @@ class HuntDisplayPane(val parent: MainWindow, val shinyHunt: ShinyHunt): Pane() 
         layoutYProperty().bind(dryStreakTitle.layoutYProperty().add(dryStreakTitle.heightProperty().add(12)))
         text = "Finish"
         textFill = Color.web("#F5F5F5")
-        onAction = { _ -> println("Finish") }
+        onAction = { _ -> }
     }
     private val pauseButton = SpriteButton(GENERIC_BLUE_BUTTON, ExtensibleWidthButtonRenderer(3), 70.0, 28.0).apply {
         font = font(FontWeight.EXTRA_BOLD, 14.0)
@@ -145,7 +153,7 @@ class HuntDisplayPane(val parent: MainWindow, val shinyHunt: ShinyHunt): Pane() 
         layoutYProperty().bind(dryStreakTitle.layoutYProperty().add(dryStreakTitle.heightProperty().add(12)))
         text = "Pause"
         textFill = Color.web("#F5F5F5")
-        onAction = { _ -> println("Pause") }
+        onAction = { _ -> }
     }
     private val editButton = SpriteButton(GENERIC_BLUE_BUTTON, ExtensibleWidthButtonRenderer(3), 70.0, 28.0).apply {
         font = font(FontWeight.EXTRA_BOLD, 14.0)
@@ -153,13 +161,28 @@ class HuntDisplayPane(val parent: MainWindow, val shinyHunt: ShinyHunt): Pane() 
         layoutYProperty().bind(dryStreakTitle.layoutYProperty().add(dryStreakTitle.heightProperty().add(12)))
         text = "Edit"
         textFill = Color.web("#F5F5F5")
-        onAction = { _ -> println("Edit") }
+        onAction = { _ ->
+            HuntSettingsWindow(this@HuntDisplayPane.parent.mainStage) {
+                this@HuntDisplayPane.shinyHunt = it
+            }.apply { set(shinyHunt.pokemon, shinyHunt.rolls, shinyHunt.baseOdds) }
+        }
     }
 
     init {
-        if (shinyHunt.pokemon == NONE) pokemonRender.image = MISSING_NO_SPRITE
+        counterObservable.addListener { _, _, _ -> }
+        huntProperty.subscribe { hunt -> updateSprite(hunt.pokemon) }
+        shinyOddsTitle.layoutXProperty().bind(widthProperty().subtract(shinyOddsTitle.widthProperty().add(shinyOdds.widthProperty())).divide(2))
+        shinyOdds.layoutXProperty().bind(shinyOddsTitle.layoutXProperty().add(shinyOddsTitle.widthProperty()))
+        dryStreakTitle.layoutXProperty().bind(widthProperty().subtract(dryStreakTitle.widthProperty().add(dryStreak.widthProperty())).divide(2))
+        dryStreak.layoutXProperty().bind(dryStreakTitle.layoutXProperty().add(dryStreakTitle.widthProperty()))
+        children.addAll(backgroundFade, pokemonName, renderBounds, pokemonRender, counter, increaseButton, shinyOddsTitle, shinyOdds,
+            dryStreakTitle, dryStreak, finishButton, pauseButton, editButton)
+    }
+
+    fun updateSprite(pokemon: Pokemon) {
+        if (pokemon == NONE) pokemonRender.image = MISSING_NO_SPRITE
         else {
-            val url = String.format("/sprites/pokemon/${shinyHunt.pokemon.spriteId()}.gif")
+            val url = String.format("/sprites/pokemon/${pokemon.spriteId()}.gif")
             try {
                 pokemonRender.image = Image(url)
             } catch (e: IllegalArgumentException) {
@@ -168,11 +191,5 @@ class HuntDisplayPane(val parent: MainWindow, val shinyHunt: ShinyHunt): Pane() 
                 LOGGER.warn("Missing sprite: $url")
             }
         }
-        shinyOddsTitle.layoutXProperty().bind(widthProperty().subtract(shinyOddsTitle.widthProperty().add(shinyOdds.widthProperty())).divide(2))
-        shinyOdds.layoutXProperty().bind(shinyOddsTitle.layoutXProperty().add(shinyOddsTitle.widthProperty()))
-        dryStreakTitle.layoutXProperty().bind(widthProperty().subtract(dryStreakTitle.widthProperty().add(dryStreak.widthProperty())).divide(2))
-        dryStreak.layoutXProperty().bind(dryStreakTitle.layoutXProperty().add(dryStreakTitle.widthProperty()))
-        children.addAll(backgroundFade, pokemonName, renderBounds, pokemonRender, counter, increaseButton, shinyOddsTitle, shinyOdds,
-            dryStreakTitle, dryStreak, finishButton, pauseButton, editButton)
     }
 }

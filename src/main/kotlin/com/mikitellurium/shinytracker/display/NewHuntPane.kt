@@ -33,7 +33,6 @@ class NewHuntPane(private val parent: MainWindow): Pane() {
         layoutXProperty().bind(this@NewHuntPane.widthProperty().subtract(widthProperty()).divide(2))
         layoutY = 140.0
         onAction = { HuntSettingsWindow(this@NewHuntPane.parent.mainStage) {
-            println(it)
             this@NewHuntPane.parent.setShinyHunt(it)
         }
         }

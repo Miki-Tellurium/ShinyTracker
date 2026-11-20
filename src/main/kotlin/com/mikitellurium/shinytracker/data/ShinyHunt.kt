@@ -4,18 +4,18 @@ import javafx.beans.property.SimpleIntegerProperty
 import kotlin.math.pow
 
 
-class ShinyHunt(val pokemon: Pokemon, var rolls: Int, val odds: Int, attempts: Int = 0) {
+class ShinyHunt(val pokemon: Pokemon, var rolls: Int, val baseOdds: Int, attempts: Int = 0) {
     val counterProperty = SimpleIntegerProperty(attempts)
     var attempts
         get() = counterProperty.get()
         set(value) = counterProperty.set(value)
 
     fun increaseAttempts() = attempts++
-    fun chance(): Int = odds / rolls
+    fun chance(): Int = baseOdds / rolls
     fun geometricDistribution(): Double {
         val chance = chance()
         return (1 - ((chance - 1) / chance.toDouble()).pow(attempts + 1)) * 100
     }
 
-    override fun toString(): String = "ShinyHunt (pokemon=${pokemon.displayName()}, rolls=$rolls, odds=$odds, attempts=$attempts)"
+    override fun toString(): String = "ShinyHunt (pokemon=${pokemon.displayName()}, rolls=$rolls, odds=$baseOdds, attempts=$attempts)"
 }

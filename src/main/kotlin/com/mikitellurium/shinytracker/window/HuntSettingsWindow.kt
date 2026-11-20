@@ -36,6 +36,7 @@ class HuntSettingsWindow(parent: Stage, onClose: (ShinyHunt) -> Unit) {
         padding = Insets(5.0)
     }
     var pokemon: Pokemon = NONE
+    var firstEdit = false
 
     private val pokemonName = Label().apply {
         font = font(FontWeight.BOLD, 18.0)
@@ -168,6 +169,10 @@ class HuntSettingsWindow(parent: Stage, onClose: (ShinyHunt) -> Unit) {
         stage.y = (screenBounds.height - stage.height) / 2
 
         pokemonSearch.textProperty().addListener { _, _, newValue ->
+            if (firstEdit) {
+                firstEdit = false
+                return@addListener
+            }
             pokemon = NONE
             if (newValue.isEmpty() || newValue.isBlank()) {
                 suggestionsPopup.hide()
@@ -202,5 +207,15 @@ class HuntSettingsWindow(parent: Stage, onClose: (ShinyHunt) -> Unit) {
             oddsText, oddsSelector, buttonBox)
         stage.scene = Scene(rootPane)
         stage.show()
+    }
+
+    fun set(mon: Pokemon, rolls: Int = 1, baseOdds: Int = 4096) {
+        firstEdit = true
+        pokemon = mon
+        pokemonSearch.text = pokemon.displayName()
+        rollsField.setValue(rolls)
+        if (baseOdds == 4096  || baseOdds == 8192) {
+            oddsSelector.value = baseOdds
+        } else throw IllegalArgumentException("Invalid base odds value, only 4096 or 8192 allowed")
     }
 }

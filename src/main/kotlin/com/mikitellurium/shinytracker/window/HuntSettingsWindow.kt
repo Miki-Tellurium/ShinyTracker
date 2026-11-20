@@ -27,9 +27,7 @@ import javafx.stage.Screen
 import javafx.stage.Stage
 import kotlin.math.min
 
-/**
- * @param onClose Function passed by the parent to read the values: 1) Pokémon 2) rolls 3) base odds
- */
+
 class HuntSettingsWindow(parent: Stage, isEdit: Boolean = false, onClose: (ShinyHunt) -> Unit) {
     val stage = Stage()
     val rootPane = GridPane().apply {

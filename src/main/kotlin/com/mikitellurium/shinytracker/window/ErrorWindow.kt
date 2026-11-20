@@ -25,7 +25,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
-class ErrorWindow(parent: Stage?, private val exception: Throwable, private val onDismiss: Runnable = Runnable {}) {
+class ErrorWindow(parent: Stage?, private val exception: Throwable, private val onDismiss: () -> Unit) {
     private val stage = Stage()
     private val rootPane = VBox(15.0).apply {
         padding = Insets(10.0)
@@ -73,7 +73,7 @@ class ErrorWindow(parent: Stage?, private val exception: Throwable, private val 
             closeButton.fire()
         }
         closeButton.onAction = { _ ->
-            onDismiss.run()
+            onDismiss()
             stage.close()
         }
 
@@ -86,7 +86,8 @@ class ErrorWindow(parent: Stage?, private val exception: Throwable, private val 
 
     private fun logException(throwable: Throwable) {
         val now = LocalDateTime.now()
-        FileWriter(File("/out/logs/crash_log_${now.format(FILE_NAME_FORMAT)}.txt"), Charsets.UTF_8).use { fw ->
+        FileWriter(File("out/logs/crash_log_${now.format(FILE_NAME_FORMAT)}.txt")
+            .apply { parentFile.mkdirs() }, Charsets.UTF_8).use { fw ->
             PrintWriter(fw).use { pw ->
                 val timestamp = now.format(TIMESTAMP_FORMAT)
 

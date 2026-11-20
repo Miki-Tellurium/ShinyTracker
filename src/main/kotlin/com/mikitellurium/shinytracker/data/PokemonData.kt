@@ -6,7 +6,7 @@ import javafx.collections.ObservableList
 import kotlinx.serialization.json.Json
 
 object PokemonData {
-    var LIST = run {
+    val LIST = run {
         val data = object {}.javaClass.getResourceAsStream(POKEMON_DATA)!!
             .bufferedReader()
             .use { it.readText() }

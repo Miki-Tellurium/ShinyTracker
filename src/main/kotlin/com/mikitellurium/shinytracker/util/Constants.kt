@@ -6,10 +6,16 @@ import javafx.scene.image.Image
 // General
 const val APP_NAME = "Shiny Tracker"
 const val APP_VERSION = "0.1-beta"
-const val WINDOW_ICON = "/sprites/pokeball_logo.png"
 const val CSS_STYLE = "style.css"
 
+// Paths
+val HOME_DIR: String = System.getProperty("user.home")
+const val DATABASE_DIR = ".local/share/shinytracker"
+const val FINISHED_HUNTS = "finished_hunts.json"
+const val PAUSED_HUNTS = "paused_hunts.json"
+
 // Sprites
+const val WINDOW_ICON = "/sprites/pokeball_logo.png"
 val NEW_HUNT_BUTTON = sprite(
     "/sprites/button/new_hunt_button.png",
     "/sprites/button/new_hunt_button_pressed.png",

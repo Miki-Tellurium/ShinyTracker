@@ -1,5 +1,6 @@
 package com.mikitellurium.shinytracker
 
+import com.mikitellurium.shinytracker.MainKt.ShinyTracker
 import com.mikitellurium.shinytracker.data.PokemonData
 import com.mikitellurium.shinytracker.window.ErrorWindow
 import com.mikitellurium.shinytracker.window.HuntSettingsWindow
@@ -10,6 +11,8 @@ import javafx.stage.Stage
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.concurrent.atomic.AtomicBoolean
+
+val LOGGER: Logger = LoggerFactory.getLogger(ShinyTracker::class.java)
 
 class MainKt {
     fun main() {
@@ -38,16 +41,14 @@ class MainKt {
             Thread.currentThread().uncaughtExceptionHandler = handler
 
             try {
-                //MainWindow(stage)
                 PokemonData.initialize()
-                HuntSettingsWindow(stage)
+                MainWindow(stage)
             } catch (t: Throwable) {
                 handler.uncaughtException(Thread.currentThread(), t)
             }
         }
 
         private companion object {
-            val LOGGER: Logger = LoggerFactory.getLogger(ShinyTracker::class.java)
             val handling = AtomicBoolean(false)
         }
     }

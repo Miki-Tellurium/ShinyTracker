@@ -4,6 +4,7 @@ import com.mikitellurium.shinytracker.element.AnimatedButton
 import com.mikitellurium.shinytracker.util.APP_VERSION
 import com.mikitellurium.shinytracker.util.NEW_HUNT_BUTTON
 import com.mikitellurium.shinytracker.util.font
+import com.mikitellurium.shinytracker.window.HuntSettingsWindow
 import com.mikitellurium.shinytracker.window.MainWindow
 import javafx.scene.control.Label
 import javafx.scene.layout.Pane
@@ -31,6 +32,11 @@ class NewHuntPane(private val parent: MainWindow): Pane() {
         setPrefSize(180.0, 180.0)
         layoutXProperty().bind(this@NewHuntPane.widthProperty().subtract(widthProperty()).divide(2))
         layoutY = 140.0
+        onAction = { HuntSettingsWindow(this@NewHuntPane.parent.mainStage) {
+            println(it)
+            this@NewHuntPane.parent.setShinyHunt(it)
+        }
+        }
     }
 
     init {

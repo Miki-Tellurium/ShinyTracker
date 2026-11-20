@@ -1,31 +1,41 @@
 package com.mikitellurium.shinytracker.window
 
+import com.mikitellurium.shinytracker.data.NONE
+import com.mikitellurium.shinytracker.data.Pokemon
+import com.mikitellurium.shinytracker.data.PokemonData
+import com.mikitellurium.shinytracker.data.ShinyHunt
 import com.mikitellurium.shinytracker.element.ExtensibleWidthButtonRenderer
 import com.mikitellurium.shinytracker.element.IntField
 import com.mikitellurium.shinytracker.element.SpriteButton
 import com.mikitellurium.shinytracker.util.GENERIC_BLUE_BUTTON
 import com.mikitellurium.shinytracker.util.GENERIC_RED_BUTTON
 import com.mikitellurium.shinytracker.util.font
+import javafx.collections.FXCollections
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.geometry.VPos
 import javafx.scene.Scene
-import javafx.scene.control.ComboBox
-import javafx.scene.control.Label
-import javafx.scene.control.ListCell
-import javafx.scene.control.TextField
+import javafx.scene.control.*
+import javafx.scene.input.KeyCode
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.HBox
 import javafx.scene.paint.Color
 import javafx.scene.text.FontWeight
+import javafx.stage.Modality
+import javafx.stage.Popup
+import javafx.stage.Screen
 import javafx.stage.Stage
+import kotlin.math.min
 
-
-class HuntSettingsWindow(parent: Stage) {
+/**
+ * @param onClose Function passed by the parent to read the values: 1) Pokémon 2) rolls 3) base odds
+ */
+class HuntSettingsWindow(parent: Stage, onClose: (ShinyHunt) -> Unit) {
     val stage = Stage()
     val rootPane = GridPane().apply {
         padding = Insets(5.0)
     }
+    var pokemon: Pokemon = NONE
 
     private val pokemonName = Label().apply {
         font = font(FontWeight.BOLD, 18.0)
@@ -41,6 +51,27 @@ class HuntSettingsWindow(parent: Stage) {
         padding = Insets(2.0, 0.0, 2.0, 4.0)
         promptText = "Search"
         isFocusTraversable = false
+    }
+    private val suggestionList = ListView<Pokemon>().apply {
+        cellFactory = {
+            object : ListCell<Pokemon>() {
+                protected override fun updateItem(item: Pokemon?, empty: Boolean) {
+                    super.updateItem(item, empty)
+                    if (empty || item == null) {
+                        setText(null)
+                        setGraphic(null)
+                    } else {
+                        text = item.displayName()
+                    }
+                }
+            }.apply {
+                font = font(FontWeight.BOLD, 14.0)
+            }
+        }
+    }
+    private val suggestionsPopup = Popup().apply {
+        isAutoHide = true
+        content.add(suggestionList)
     }
     private val rollsText = Label().apply {
         font = font(FontWeight.BOLD, 18.0)
@@ -115,18 +146,60 @@ class HuntSettingsWindow(parent: Stage) {
         font = font(FontWeight.EXTRA_BOLD, 16.0)
         text = "Confirm"
         textFill = Color.WHITE
+        onAction = {
+            onClose.invoke(ShinyHunt(pokemon, rollsField.value(), oddsSelector.value))
+            stage.close()
+        }
     }
     private val closeButton = SpriteButton(GENERIC_RED_BUTTON, ExtensibleWidthButtonRenderer(3), 80.0, 30.0).apply {
         font = font(FontWeight.EXTRA_BOLD, 16.0)
         text = "Close"
         textFill = Color.WHITE
+        onAction = { stage.close() }
     }
 
     init {
         stage.isResizable = false
+        stage.initOwner(parent)
+        stage.initModality(Modality.APPLICATION_MODAL)
+        stage.isAlwaysOnTop = true
+        val screenBounds = Screen.getPrimary().bounds
+        stage.x = (screenBounds.width - stage.width) / 2
+        stage.y = (screenBounds.height - stage.height) / 2
+
+        pokemonSearch.textProperty().addListener { _, _, newValue ->
+            pokemon = NONE
+            if (newValue.isEmpty() || newValue.isBlank()) {
+                suggestionsPopup.hide()
+            } else {
+                val filtered = PokemonData.gather(newValue)
+                FXCollections.sort(filtered) { p1, p2 -> p1.fullName.compareTo(p2.fullName, true) }
+                suggestionList.items = filtered
+
+                val h = min(filtered.size, 10) * 30.0
+                suggestionList.prefHeight = h
+
+                suggestionsPopup.show(
+                    stage,
+                    pokemonSearch.localToScreen(pokemonSearch.boundsInLocal).minX,
+                    pokemonSearch.localToScreen(pokemonSearch.boundsInLocal).maxY
+                )
+            }
+        }
+        val setText = {
+            val selected = suggestionList.getSelectionModel().getSelectedItem()
+            if (selected != null) {
+                pokemonSearch.text = selected.displayName()
+                pokemon = selected
+                suggestionsPopup.hide()
+            }
+        }
+        suggestionList.onMouseClicked = { setText() }
+        suggestionList.onKeyPressed = { event -> if (event.code == KeyCode.ENTER) setText() }
+
         buttonBox.children.addAll(confirmButton, closeButton)
-        rootPane.children.addAll(pokemonName, pokemonSearch, rollsText, rollsField, separator, oddsText, oddsSelector,
-            buttonBox)
+        rootPane.children.addAll(pokemonName, pokemonSearch, rollsText, rollsField, separator,
+            oddsText, oddsSelector, buttonBox)
         stage.scene = Scene(rootPane)
         stage.show()
     }

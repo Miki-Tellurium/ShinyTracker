@@ -37,4 +37,6 @@ class IntField(val minValue: Int = 0, val maxValue: Int = Int.MAX_VALUE, val def
         formatter.value = value
         text = value.toString()
     }
+
+    fun value(): Int = formatter.value
 }

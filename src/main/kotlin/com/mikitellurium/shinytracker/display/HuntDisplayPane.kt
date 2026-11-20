@@ -1,9 +1,11 @@
 package com.mikitellurium.shinytracker.display
 
+import com.mikitellurium.shinytracker.LOGGER
+import com.mikitellurium.shinytracker.data.NONE
+import com.mikitellurium.shinytracker.data.ShinyHunt
 import com.mikitellurium.shinytracker.element.AnimatedButton
 import com.mikitellurium.shinytracker.element.ExtensibleWidthButtonRenderer
 import com.mikitellurium.shinytracker.element.SpriteButton
-import com.mikitellurium.shinytracker.element.SpriteRenderer
 import com.mikitellurium.shinytracker.util.*
 import com.mikitellurium.shinytracker.window.MainWindow
 import javafx.beans.binding.Bindings
@@ -14,9 +16,14 @@ import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.text.FontWeight
+import java.lang.String
+import java.util.*
+import kotlin.IllegalArgumentException
+import kotlin.apply
+import kotlin.text.format
 
 
-class HuntDisplayPane(val parent: MainWindow): Pane() {
+class HuntDisplayPane(val parent: MainWindow, val shinyHunt: ShinyHunt): Pane() {
     private val pokemonName = Label().apply {
         font = font(FontWeight.BOLD, 40.0)
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2))
@@ -71,22 +78,21 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
     }
     private val counterCenterY = renderBounds.layoutYProperty().add(renderBounds.heightProperty()).add(35)
     private val counter = Label().apply {
+        font = font(FontWeight.EXTRA_BOLD, 66.0)
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2))
         layoutYProperty().bind(counterCenterY.subtract(heightProperty().divide(2)))
+        val binding = Bindings.createStringBinding({ shinyHunt.attempts.toString() }, shinyHunt.counterProperty)
+        textProperty().bind(binding)
         textProperty().addListener { _, _, _ ->
             val size = 70.0 - (text.length * 4)
             font = font(FontWeight.EXTRA_BOLD, size)
         }
         textFill = Color.web("#F5F5F5")
     }
-    private var textCounter = 1
     private val increaseButton = AnimatedButton(INCREASE_BUTTON, 150.0, 75.0).apply {
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2))
         layoutYProperty().bind(counterCenterY.add(40))
-        onAction = { _ ->
-            textCounter++
-            this@HuntDisplayPane.counter.text = "0".repeat(textCounter)
-        }
+        onAction = { _ -> shinyHunt.increaseAttempts() }
     }
     private val shinyOddsTitle = Label().apply {
         prefWidth = 120.0
@@ -100,6 +106,10 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         font = font(FontWeight.BOLD, 20.0)
         styleClass.add("info-label")
         layoutYProperty().bind(increaseButton.layoutYProperty().add(increaseButton.heightProperty()).add(10))
+        val textBinding = Bindings.createStringBinding({
+            "1/${shinyHunt.chance()}"
+        }, shinyHunt.counterProperty)
+        textProperty().bind(textBinding)
     }
 
     private val dryStreakTitle = Label().apply {
@@ -115,6 +125,11 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
         font = font(FontWeight.BOLD, 20.0)
         styleClass.add("info-label")
         layoutYProperty().bind(shinyOddsTitle.layoutYProperty().add(shinyOdds.heightProperty()).subtract(1))
+        val binding = Bindings.createStringBinding({
+            val p = shinyHunt.geometricDistribution()
+            "${"%.3f".format(Locale.ROOT, p)}%"
+        }, shinyHunt.counterProperty)
+        textProperty().bind(binding)
     }
     private val finishButton = SpriteButton(GENERIC_BLUE_BUTTON, ExtensibleWidthButtonRenderer(3), 70.0, 28.0).apply {
         font = font(FontWeight.EXTRA_BOLD, 14.0)
@@ -142,18 +157,21 @@ class HuntDisplayPane(val parent: MainWindow): Pane() {
     }
 
     init {
+        if (shinyHunt.pokemon == NONE) pokemonRender.image = MISSING_NO_SPRITE
+        else {
+            val url = String.format("/sprites/pokemon/${shinyHunt.pokemon.spriteId()}.gif")
+            try {
+                pokemonRender.image = Image(url)
+            } catch (e: IllegalArgumentException) {
+                // Sprite is not found
+                pokemonRender.image = MISSING_NO_SPRITE
+                LOGGER.warn("Missing sprite: $url")
+            }
+        }
         shinyOddsTitle.layoutXProperty().bind(widthProperty().subtract(shinyOddsTitle.widthProperty().add(shinyOdds.widthProperty())).divide(2))
         shinyOdds.layoutXProperty().bind(shinyOddsTitle.layoutXProperty().add(shinyOddsTitle.widthProperty()))
         dryStreakTitle.layoutXProperty().bind(widthProperty().subtract(dryStreakTitle.widthProperty().add(dryStreak.widthProperty())).divide(2))
         dryStreak.layoutXProperty().bind(dryStreakTitle.layoutXProperty().add(dryStreakTitle.widthProperty()))
-
-        val pokemon = "Froslass"
-        pokemonName.text = pokemon
-        val spriteUrl = "/sprites/pokemon/${pokemon.lowercase()}.gif"
-        pokemonRender.image = Image(spriteUrl)
-        counter.text = "0"
-        shinyOdds.text = "1/4096"
-        dryStreak.text = "100%"
         children.addAll(backgroundFade, pokemonName, renderBounds, pokemonRender, counter, increaseButton, shinyOddsTitle, shinyOdds,
             dryStreakTitle, dryStreak, finishButton, pauseButton, editButton)
     }

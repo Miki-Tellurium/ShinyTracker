@@ -3,6 +3,8 @@ package com.mikitellurium.shinytracker.data
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+val NONE = Pokemon(-1, "none", "None", null, Generation.GEN_I, Type("???"))
+
 @Serializable
 data class Pokemon(
     val id: Int,
@@ -12,7 +14,7 @@ data class Pokemon(
     val generation: Generation,
     val type: Type
 ) {
-    fun sprite(): String = name.let { if (variant != null) "${it}_$variant" else it }
+    fun spriteId(): String = name.let { if (variant != null) "${it}_$variant" else it }
     fun displayName(): String =
         variant?.split("_")
             ?.joinToString(" ") { it.replaceFirstChar(Char::uppercaseChar) }

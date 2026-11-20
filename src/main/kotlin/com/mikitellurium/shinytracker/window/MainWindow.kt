@@ -31,4 +31,10 @@ class MainWindow(val mainStage: Stage) {
             stylesheets.add(CSS_STYLE)
         }
     }
+
+    fun clearShinyHunt() {
+        mainStage.scene = Scene(NewHuntPane(this)).apply {
+            stylesheets.add(CSS_STYLE)
+        }
+    }
 }

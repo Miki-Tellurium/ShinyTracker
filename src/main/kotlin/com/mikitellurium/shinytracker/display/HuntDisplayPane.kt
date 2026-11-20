@@ -1,6 +1,7 @@
 package com.mikitellurium.shinytracker.display
 
 import com.mikitellurium.shinytracker.LOGGER
+import com.mikitellurium.shinytracker.data.HuntData
 import com.mikitellurium.shinytracker.data.NONE
 import com.mikitellurium.shinytracker.data.Pokemon
 import com.mikitellurium.shinytracker.data.ShinyHunt
@@ -8,6 +9,7 @@ import com.mikitellurium.shinytracker.element.AnimatedButton
 import com.mikitellurium.shinytracker.element.ExtensibleWidthButtonRenderer
 import com.mikitellurium.shinytracker.element.SpriteButton
 import com.mikitellurium.shinytracker.util.*
+import com.mikitellurium.shinytracker.window.ConfirmationWindow
 import com.mikitellurium.shinytracker.window.HuntSettingsWindow
 import com.mikitellurium.shinytracker.window.MainWindow
 import javafx.beans.binding.Bindings
@@ -145,7 +147,13 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
         layoutYProperty().bind(dryStreakTitle.layoutYProperty().add(dryStreakTitle.heightProperty().add(12)))
         text = "Finish"
         textFill = Color.web("#F5F5F5")
-        onAction = { _ -> }
+        onAction = { _ ->
+            ConfirmationWindow(this@HuntDisplayPane.parent.mainStage, "Are you sure you want to end this shiny hunt? The data will be saved.") {
+                HuntData.FINISHED.add(shinyHunt.toSavedData())
+                HuntData.save()
+                this@HuntDisplayPane.parent.clearShinyHunt()
+            }
+        }
     }
     private val pauseButton = SpriteButton(GENERIC_BLUE_BUTTON, ExtensibleWidthButtonRenderer(3), 70.0, 28.0).apply {
         font = font(FontWeight.EXTRA_BOLD, 14.0)
@@ -185,7 +193,7 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
             val url = String.format("/sprites/pokemon/${pokemon.spriteId()}.gif")
             try {
                 pokemonRender.image = Image(url)
-            } catch (e: IllegalArgumentException) {
+            } catch (_: IllegalArgumentException) {
                 // Sprite is not found
                 pokemonRender.image = MISSING_NO_SPRITE
                 LOGGER.warn("Missing sprite: $url")

@@ -1,6 +1,7 @@
 package com.mikitellurium.shinytracker.util
 
 import com.mikitellurium.shinytracker.element.BiStateSprite
+import javafx.scene.Scene
 import javafx.scene.image.Image
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
@@ -12,3 +13,5 @@ fun sprite(default: String, pressed: String, width: Int, height: Int,
     Image(default, requestedWidth, requestedHeight, true, false),
     Image(pressed, requestedWidth, requestedHeight, true, false),
     width, height)
+
+fun Scene.withDefaultStyle(): Scene = this.apply { stylesheets.add(CSS_STYLE) }

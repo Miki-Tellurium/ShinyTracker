@@ -2,9 +2,11 @@ package com.mikitellurium.shinytracker.window
 
 import com.mikitellurium.shinytracker.element.ExtensibleWidthButtonRenderer
 import com.mikitellurium.shinytracker.element.SpriteButton
+import com.mikitellurium.shinytracker.util.CSS_STYLE
 import com.mikitellurium.shinytracker.util.GENERIC_BLUE_BUTTON
 import com.mikitellurium.shinytracker.util.GENERIC_RED_BUTTON
 import com.mikitellurium.shinytracker.util.font
+import com.mikitellurium.shinytracker.util.withDefaultStyle
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Scene
@@ -67,7 +69,7 @@ class ConfirmationWindow(parent: Stage, private val message: String, private val
 
         buttonBox.children.addAll(confirmButton, closeButton)
         rootPane.children.addAll(messageLabel, buttonBox)
-        stage.scene = Scene(rootPane, 350.0, -1.0)
+        stage.scene = Scene(rootPane, 350.0, -1.0).withDefaultStyle()
         stage.sizeToScene()
         stage.show()
     }

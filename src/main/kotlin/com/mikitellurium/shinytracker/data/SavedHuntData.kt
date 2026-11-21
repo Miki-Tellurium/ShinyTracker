@@ -28,8 +28,10 @@ data class SavedHuntData(
         override fun deserialize(decoder: Decoder): Pokemon {
             val str = decoder.decodeString()
             val array = str.split("_", limit = 2)
-            return PokemonData.LIST.find { it.name == array[0] && it.variant == array[1] } ?:
-            throw RuntimeException("Pokemon not found: $str")
+            return if (str == NONE.name) NONE
+            else PokemonData.LIST.find {
+                 it.name == array[0] && array.getOrNull(1)?.let { v -> it.variant == v } ?: true
+            } ?: throw RuntimeException("Pokemon not found: $str")
         }
     }
 }

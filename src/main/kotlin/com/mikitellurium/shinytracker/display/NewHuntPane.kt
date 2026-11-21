@@ -15,17 +15,16 @@ import javafx.scene.text.Text
 
 class NewHuntPane(private val parent: MainWindow): Pane() {
     private val credits = Text().apply {
+        styleClass.add("text")
+        font = font(FontWeight.BOLD, 14.0)
         layoutY = 12.0
         text = "v$APP_VERSION by Miki Tellurium"
-        font = font(FontWeight.BOLD, 14.0)
-        fill = Color.web("#F5F5F5")
     }
     private val newHunt = Label().apply {
         font = font(FontWeight.BOLD, 40.0)
         text = "New Shiny Hunt"
         layoutXProperty().bind(this@NewHuntPane.widthProperty().subtract(widthProperty()).divide(2))
         layoutY = 70.0
-        textFill = Color.web("#F5F5F5")
     }
 
     private val newHuntButton = AnimatedButton(NEW_HUNT_BUTTON).apply{

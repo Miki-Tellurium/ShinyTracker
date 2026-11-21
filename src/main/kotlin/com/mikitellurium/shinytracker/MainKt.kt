@@ -15,6 +15,8 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 val LOGGER: Logger = LoggerFactory.getLogger(ShinyTracker::class.java)
 
+// TODO on close save the current hunt as paused
+
 class MainKt {
     fun main() {
         Application.launch(ShinyTracker::class.java)

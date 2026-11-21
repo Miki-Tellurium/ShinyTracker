@@ -7,9 +7,12 @@ import com.mikitellurium.shinytracker.data.ShinyHunt
 import com.mikitellurium.shinytracker.element.ExtensibleWidthButtonRenderer
 import com.mikitellurium.shinytracker.element.IntField
 import com.mikitellurium.shinytracker.element.SpriteButton
+import com.mikitellurium.shinytracker.util.CSS_STYLE
 import com.mikitellurium.shinytracker.util.GENERIC_BLUE_BUTTON
 import com.mikitellurium.shinytracker.util.GENERIC_RED_BUTTON
 import com.mikitellurium.shinytracker.util.font
+import com.mikitellurium.shinytracker.util.withDefaultStyle
+import javafx.application.Platform
 import javafx.collections.FXCollections
 import javafx.geometry.Insets
 import javafx.geometry.Pos
@@ -20,11 +23,13 @@ import javafx.scene.input.KeyCode
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.HBox
 import javafx.scene.paint.Color
+import javafx.scene.shape.Path
 import javafx.scene.text.FontWeight
 import javafx.stage.Modality
 import javafx.stage.Popup
 import javafx.stage.Screen
 import javafx.stage.Stage
+import javax.swing.text.html.CSS
 import kotlin.math.min
 
 
@@ -51,6 +56,7 @@ class HuntSettingsWindow(parent: Stage, isEdit: Boolean = false, onClose: (Shiny
         promptText = "Search"
         isFocusTraversable = false
     }
+
     private val suggestionList = ListView<Pokemon>().apply {
         cellFactory = {
             object : ListCell<Pokemon>() {
@@ -142,7 +148,7 @@ class HuntSettingsWindow(parent: Stage, isEdit: Boolean = false, onClose: (Shiny
     private val attemptsField = IntField().apply {
         font = font(FontWeight.BOLD, 14.0)
         GridPane.setConstraints(this, 0, 5)
-        GridPane.setMargin(this, Insets(-5.0, 0.0, 0.0, 0.0))
+        GridPane.setMargin(this, Insets(-3.0, 0.0, 0.0, 0.0))
         prefWidth = 40.0
         padding = Insets(2.0, 0.0, 2.0, 4.0)
         promptText = "Attempts"
@@ -190,17 +196,19 @@ class HuntSettingsWindow(parent: Stage, isEdit: Boolean = false, onClose: (Shiny
                 suggestionsPopup.hide()
             } else {
                 val filtered = PokemonData.gather(newValue)
-                FXCollections.sort(filtered) { p1, p2 -> p1.fullName.compareTo(p2.fullName, true) }
-                suggestionList.items = filtered
+                if (filtered.isNotEmpty()) {
+                    FXCollections.sort(filtered) { p1, p2 -> p1.fullName.compareTo(p2.fullName, true) }
+                    suggestionList.items = filtered
 
-                val h = min(filtered.size, 10) * 30.0
-                suggestionList.prefHeight = h
+                    val h = min(filtered.size, 10) * 30.0
+                    suggestionList.prefHeight = h
 
-                suggestionsPopup.show(
-                    stage,
-                    pokemonSearch.localToScreen(pokemonSearch.boundsInLocal).minX,
-                    pokemonSearch.localToScreen(pokemonSearch.boundsInLocal).maxY
-                )
+                    suggestionsPopup.show(
+                        stage,
+                        pokemonSearch.localToScreen(pokemonSearch.boundsInLocal).minX,
+                        pokemonSearch.localToScreen(pokemonSearch.boundsInLocal).maxY
+                    )
+                } else suggestionsPopup.hide()
             }
         }
         val setText = {
@@ -221,7 +229,7 @@ class HuntSettingsWindow(parent: Stage, isEdit: Boolean = false, onClose: (Shiny
             rootPane.children.addAll(attemptsText, attemptsField)
             GridPane.setConstraints(buttonBox, 0, 6)
         }
-        stage.scene = Scene(rootPane)
+        stage.scene = Scene(rootPane).withDefaultStyle()
         stage.show()
     }
 

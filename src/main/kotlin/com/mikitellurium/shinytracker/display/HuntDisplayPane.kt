@@ -41,7 +41,6 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2))
         textProperty().bind(huntProperty.map { it.pokemon.displayName() })
         layoutY = 0.0
-        textFill = Color.web("#F5F5F5")
     }
     private val renderBounds = Rectangle().apply {
         layoutY = 55.0
@@ -101,7 +100,6 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
             val size = 70.0 - (text.length * 4)
             font = font(FontWeight.EXTRA_BOLD, size)
         }
-        textFill = Color.web("#F5F5F5")
     }
     private val increaseButton = AnimatedButton(INCREASE_BUTTON, 150.0, 75.0).apply {
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2))
@@ -110,9 +108,9 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
     }
     private val shinyOddsTitle = Label().apply {
         prefWidth = 120.0
-        text = "Odds"
         font = font(FontWeight.BOLD, 20.0)
         styleClass.add("info-label-header")
+        text = "Odds"
         layoutYProperty().bind(increaseButton.layoutYProperty().add(increaseButton.heightProperty()).add(10))
     }
     private val shinyOdds = Label().apply {
@@ -126,15 +124,15 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
     }
     private val dryStreakTitle = Label().apply {
         prefWidth = 120.0
-        text = "Dry Streak"
-        font = font(FontWeight.BOLD, 20.0)
         styleClass.add("info-label-header")
+        font = font(FontWeight.BOLD, 20.0)
+        text = "Dry Streak"
         layoutYProperty().bind(shinyOddsTitle.layoutYProperty().add(shinyOddsTitle.heightProperty()).subtract(1))
     }
     private val dryStreak = Label().apply {
+        styleClass.add("info-label")
         prefWidth = 180.0
         font = font(FontWeight.BOLD, 20.0)
-        styleClass.add("info-label")
         layoutYProperty().bind(shinyOddsTitle.layoutYProperty().add(shinyOdds.heightProperty()).subtract(1))
         textProperty().bind(Bindings.createStringBinding({
             val p = shinyHunt.geometricDistribution()
@@ -142,11 +140,11 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
         }, counterObservable))
     }
     private val finishButton = SpriteButton(GENERIC_BLUE_BUTTON, ExtensibleWidthButtonRenderer(3), 70.0, 28.0).apply {
+        styleClass.add("sprite-button")
         font = font(FontWeight.EXTRA_BOLD, 14.0)
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2).subtract(widthProperty().add(40)))
         layoutYProperty().bind(dryStreakTitle.layoutYProperty().add(dryStreakTitle.heightProperty().add(12)))
         text = "Finish"
-        textFill = Color.web("#F5F5F5")
         onAction = { _ ->
             ConfirmationWindow(this@HuntDisplayPane.parent.mainStage, "Are you sure you want to end this shiny hunt? The data will be saved.") {
                 HuntData.FINISHED.add(shinyHunt.toSavedData())
@@ -156,19 +154,19 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
         }
     }
     private val pauseButton = SpriteButton(GENERIC_BLUE_BUTTON, ExtensibleWidthButtonRenderer(3), 70.0, 28.0).apply {
+        styleClass.add("sprite-button")
         font = font(FontWeight.EXTRA_BOLD, 14.0)
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2))
         layoutYProperty().bind(dryStreakTitle.layoutYProperty().add(dryStreakTitle.heightProperty().add(12)))
         text = "Pause"
-        textFill = Color.web("#F5F5F5")
         onAction = { _ -> }
     }
     private val editButton = SpriteButton(GENERIC_BLUE_BUTTON, ExtensibleWidthButtonRenderer(3), 70.0, 28.0).apply {
+        styleClass.add("sprite-button")
         font = font(FontWeight.EXTRA_BOLD, 14.0)
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2).add(widthProperty().add(40)))
         layoutYProperty().bind(dryStreakTitle.layoutYProperty().add(dryStreakTitle.heightProperty().add(12)))
         text = "Edit"
-        textFill = Color.web("#F5F5F5")
         onAction = { _ ->
             HuntSettingsWindow(this@HuntDisplayPane.parent.mainStage, true) {
                 this@HuntDisplayPane.shinyHunt = it

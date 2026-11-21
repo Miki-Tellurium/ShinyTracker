@@ -4,7 +4,6 @@
 
 .info-label-header {
     -fx-background-color: #1A1A64;
-    -fx-text-fill: #F5F5F5;
 	-fx-border-color: #2D2D5A;
 	-fx-border-width: 2px;
 	-fx-padding: 2px;
@@ -14,7 +13,104 @@
     -fx-background-color: #1A1A3E;
     -fx-alignment: center-right;
 	-fx-border-color: #2D2D5A #2D2D5A #2D2D5A transparent;
-	-fx-text-fill: #F5F5F5;
 	-fx-border-width: 2px;
 	-fx-padding: 2px;
+}
+
+.sprite-button {
+    -fx-text-fill: #F5F5F5;
+}
+
+.text {
+    -fx-fill: #F5F5F5;
+}
+
+.label {
+    -fx-text-fill: #F5F5F5;
+}
+
+.text-field {
+    -fx-background-color: #1A1A3E;
+    -fx-text-fill: #F5F5F5;
+    -fx-prompt-text-fill: #3C3C69;
+    -fx-highlight-fill:	#646496;
+    -fx-highlight-text-fill: #0A0A14;
+    -fx-border-color: #2D2D5A;
+    -fx-border-width: 2px;
+}
+
+.list-view {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.list-cell {
+    -fx-background-color: #1A1A3E;
+}
+
+.list-cell:hover,
+.list-cell:selected,
+.list-view:focused .list-cell:selected {
+    -fx-background-color: #2D2D5A;
+}
+
+.list-view .scroll-bar:vertical {
+    -fx-padding: 0;
+    -fx-pref-width: 12;
+}
+
+.scroll-bar .track {
+    -fx-background-color: #282846;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #373755;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-shape: "";
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-max-width: 0;
+    -fx-max-height: 0;
+}
+
+.combo-box-base {
+    -fx-border-color: #2D2D5A;
+    -fx-border-width: 2px;
+    -fx-text-fill: #F5F5F5;
+}
+
+.combo-box {
+    -fx-background-color: #1A1A3E;
+}
+
+.combo-box .list-cell {
+    -fx-padding: 2 0 2 4;
+}
+
+.combo-box .list-cell:selected {
+    -fx-background-color: #1A1A3E;
+}
+
+.combo-box .arrow-button {
+    -fx-padding: 0 4 0 8;
+}
+
+.combo-box .arrow-button .arrow {
+    -fx-background-color: #2D2D5A;
+    -fx-background-insets: 0;
+    -fx-padding: 6.06 7 6.06 7;
+    -fx-shape: "M 0 0 L 10 0 L 5 12.12 Z";
 }

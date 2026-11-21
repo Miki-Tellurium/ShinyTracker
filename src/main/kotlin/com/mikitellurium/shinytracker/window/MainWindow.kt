@@ -20,21 +20,15 @@ class MainWindow(val mainStage: Stage) {
         val screenBounds = Screen.getPrimary().bounds
         mainStage.x = (screenBounds.width - mainStage.width) / 2
         mainStage.y = (screenBounds.height - mainStage.height) / 2
-        mainStage.scene = Scene(NewHuntPane(this)).apply {
-                stylesheets.add(CSS_STYLE)
-        }
+        mainStage.scene = Scene(NewHuntPane(this)).withDefaultStyle()
         mainStage.show()
     }
 
     fun setShinyHunt(shinyHunt: ShinyHunt) {
-        mainStage.scene = Scene(HuntDisplayPane(this, shinyHunt)).apply {
-            stylesheets.add(CSS_STYLE)
-        }
+        mainStage.scene = Scene(HuntDisplayPane(this, shinyHunt)).withDefaultStyle()
     }
 
     fun clearShinyHunt() {
-        mainStage.scene = Scene(NewHuntPane(this)).apply {
-            stylesheets.add(CSS_STYLE)
-        }
+        mainStage.scene = Scene(NewHuntPane(this)).withDefaultStyle()
     }
 }

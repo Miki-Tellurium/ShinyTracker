@@ -2,7 +2,10 @@ package com.mikitellurium.shinytracker.window
 
 import com.mikitellurium.shinytracker.element.ExtensibleWidthButtonRenderer
 import com.mikitellurium.shinytracker.element.SpriteButton
+import com.mikitellurium.shinytracker.util.DATABASE_DIR
+import com.mikitellurium.shinytracker.util.FINISHED_HUNTS
 import com.mikitellurium.shinytracker.util.GENERIC_RED_BUTTON
+import com.mikitellurium.shinytracker.util.HOME_DIR
 import com.mikitellurium.shinytracker.util.font
 import javafx.geometry.Insets
 import javafx.geometry.Pos
@@ -86,8 +89,10 @@ class ErrorWindow(parent: Stage?, private val exception: Throwable, private val 
 
     private fun logException(throwable: Throwable) {
         val now = LocalDateTime.now()
-        FileWriter(File("out/logs/crash_log_${now.format(FILE_NAME_FORMAT)}.txt")
-            .apply { parentFile.mkdirs() }, Charsets.UTF_8).use { fw ->
+        val file = File(HOME_DIR).resolve(DATABASE_DIR)
+            .resolve("logs/crash_log_${now.format(FILE_NAME_FORMAT)}.txt")
+        file.parentFile.mkdirs()
+        FileWriter(file, Charsets.UTF_8).use { fw ->
             PrintWriter(fw).use { pw ->
                 val timestamp = now.format(TIMESTAMP_FORMAT)
 

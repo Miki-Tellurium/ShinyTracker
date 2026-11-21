@@ -13,7 +13,7 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.Region
 import javafx.scene.text.FontWeight
 
-class PausedHuntCell : ListCell<SavedHuntData>() {
+class PausedHuntCell(onAction: (SavedHuntData) -> Unit): ListCell<SavedHuntData>() {
     private val pokemonName = Label().apply {
         font = font(FontWeight.BOLD, 14.0)
         minWidth = 0.0
@@ -29,6 +29,7 @@ class PausedHuntCell : ListCell<SavedHuntData>() {
         contentDisplay = ContentDisplay.GRAPHIC_ONLY
         padding = Insets(0.0, 4.0, 0.0, 4.0)
         rootBox.prefWidthProperty().bind(widthProperty().subtract(padding.left + padding.right + 2.0))
+        onMouseClicked = { onAction(item) }
     }
 
     override fun updateItem(item: SavedHuntData?, empty: Boolean) {

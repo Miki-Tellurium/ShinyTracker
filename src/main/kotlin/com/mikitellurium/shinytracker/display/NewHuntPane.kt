@@ -50,7 +50,12 @@ class NewHuntPane(private val parent: MainWindow): GridPane() {
         setValignment(this, VPos.TOP)
         maxWidth = 200.0
         fixedCellSize = cellHeight
-        cellFactory = { PausedHuntCell() }
+        cellFactory = {
+            PausedHuntCell {
+                HuntData.PAUSED.remove(it)
+                this@NewHuntPane.parent.setShinyHunt(it.toHunt())
+            }
+        }
     }
     private val buttonBox = VBox().apply {
         setConstraints(this, 1, 0)

@@ -1,6 +1,8 @@
 package com.mikitellurium.shinytracker.data
 
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
@@ -13,7 +15,9 @@ data class SavedHuntData(
     @Serializable(with = PokemonSerializer::class) val pokemon: Pokemon,
     val rolls: Int,
     val baseOdds: Int,
-    val attempts: Int
+    val attempts: Int,
+    @SerialName("saved_on")
+    val savedOn: LocalDate
 ) {
     fun toHunt(): ShinyHunt = ShinyHunt(pokemon, rolls, baseOdds, attempts)
 

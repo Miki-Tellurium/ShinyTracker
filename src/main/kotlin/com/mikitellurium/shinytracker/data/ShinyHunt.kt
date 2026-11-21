@@ -1,7 +1,10 @@
 package com.mikitellurium.shinytracker.data
 
 import javafx.beans.property.SimpleIntegerProperty
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.todayIn
 import kotlin.math.pow
+import kotlin.time.Clock
 
 class ShinyHunt(
     val pokemon: Pokemon,
@@ -20,7 +23,6 @@ class ShinyHunt(
         val chance = chance()
         return (1 - ((chance - 1) / chance.toDouble()).pow(attempts + 1)) * 100
     }
-    fun toSavedData(): SavedHuntData = SavedHuntData(pokemon, rolls, baseOdds, attempts)
-
+    fun toSavedData(): SavedHuntData = SavedHuntData(pokemon, rolls, baseOdds, attempts, Clock.System.todayIn(TimeZone.currentSystemDefault()))
     override fun toString(): String = "ShinyHunt (pokemon=${pokemon.displayName()}, rolls=$rolls, odds=$baseOdds, attempts=$attempts)"
 }

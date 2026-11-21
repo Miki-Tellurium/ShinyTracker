@@ -17,9 +17,11 @@ dependencies {
     testImplementation(kotlin("test"))
 
     val kotlinxSerializationVersion = project.property("kotlinxSerializationVersion")
+    val kotlinxDateTimeVersion = project.property("kotlinxDateTimeVersion")
     val slf4jVersion = project.property("slf4jVersion")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinxDateTimeVersion")
     implementation("org.slf4j:slf4j-simple:$slf4jVersion")
 }
 

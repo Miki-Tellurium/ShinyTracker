@@ -23,9 +23,6 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.text.FontWeight
 import java.util.*
-import kotlin.IllegalArgumentException
-import kotlin.apply
-import kotlin.text.format
 
 
 class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {

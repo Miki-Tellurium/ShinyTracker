@@ -21,8 +21,20 @@
     -fx-text-fill: #F5F5F5;
 }
 
-.text {
-    -fx-fill: #F5F5F5;
+.paused-hunt-list .list-cell:hover {
+    -fx-background-color: #2D2D5A;
+}
+
+.paused-hunt-list .list-cell {
+    -fx-background-color: #1A1A3E;
+    -fx-border-color: transparent #2D2D5A #2D2D5A #2D2D5A;
+    -fx-border-width: 0 2px 2px 2px;
+    -fx-padding: 2px;
+}
+
+.paused-hunt-list .list-cell:first-child {
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-color: #2D2D5A;
 }
 
 .label {
@@ -46,6 +58,10 @@
 
 .list-cell {
     -fx-background-color: #1A1A3E;
+}
+
+.list-cell .text {
+    -fx-fill: #F5F5F5;
 }
 
 .list-cell:hover,

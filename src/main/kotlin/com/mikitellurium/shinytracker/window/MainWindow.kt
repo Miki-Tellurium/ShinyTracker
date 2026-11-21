@@ -1,5 +1,6 @@
 package com.mikitellurium.shinytracker.window
 
+import com.mikitellurium.shinytracker.data.HuntData
 import com.mikitellurium.shinytracker.data.ShinyHunt
 import com.mikitellurium.shinytracker.display.HuntDisplayPane
 import com.mikitellurium.shinytracker.display.NewHuntPane
@@ -21,6 +22,13 @@ class MainWindow(val mainStage: Stage) {
         mainStage.x = (screenBounds.width - mainStage.width) / 2
         mainStage.y = (screenBounds.height - mainStage.height) / 2
         mainStage.scene = Scene(NewHuntPane(this)).withDefaultStyle()
+        mainStage.onCloseRequest = {
+            val pane = mainStage.scene.root
+            if (pane is HuntDisplayPane) {
+                HuntData.PAUSED.add(pane.shinyHunt.toSavedData())
+                HuntData.save()
+            }
+        }
         mainStage.show()
     }
 

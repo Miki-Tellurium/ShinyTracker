@@ -159,7 +159,11 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2))
         layoutYProperty().bind(dryStreakTitle.layoutYProperty().add(dryStreakTitle.heightProperty().add(12)))
         text = "Pause"
-        onAction = { _ -> }
+        onAction = { _ ->
+            HuntData.PAUSED.add(shinyHunt.toSavedData())
+            HuntData.save()
+            this@HuntDisplayPane.parent.clearShinyHunt()
+        }
     }
     private val editButton = SpriteButton(GENERIC_BLUE_BUTTON, ExtensibleWidthButtonRenderer(3), 70.0, 28.0).apply {
         styleClass.add("sprite-button")

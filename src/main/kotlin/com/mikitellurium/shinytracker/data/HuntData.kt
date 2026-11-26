@@ -1,5 +1,6 @@
 package com.mikitellurium.shinytracker.data
 
+import com.mikitellurium.shinytracker.LOGGER
 import com.mikitellurium.shinytracker.util.DATABASE_DIR
 import com.mikitellurium.shinytracker.util.FINISHED_HUNTS
 import com.mikitellurium.shinytracker.util.HOME_DIR
@@ -23,11 +24,13 @@ object HuntData {
                 it.write(json.encodeToString(list))
             }
         }
+        LOGGER.info("Saved hunt data.")
     }
 
     fun reload() {
         FINISHED = load(FINISHED_HUNTS).toMutableList()
         PAUSED = load(PAUSED_HUNTS).toMutableList()
+        LOGGER.info("Loaded hunt data.")
     }
 
     private fun load(endpoint: String): List<SavedHuntData> {

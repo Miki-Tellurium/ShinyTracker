@@ -101,7 +101,10 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
     private val increaseButton = AnimatedButton(INCREASE_BUTTON, 150.0, 75.0).apply {
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2))
         layoutYProperty().bind(counterCenterY.add(40))
-        onAction = { _ -> shinyHunt.increaseAttempts() }
+        onAction = {
+            shinyHunt.increaseAttempts()
+            LOGGER.info("Increased counter. Current attempts: ${shinyHunt.attempts}")
+        }
     }
     private val shinyOddsTitle = Label().apply {
         prefWidth = 120.0
@@ -147,6 +150,7 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
                 HuntData.FINISHED.add(shinyHunt.toSavedData())
                 HuntData.save()
                 this@HuntDisplayPane.parent.clearShinyHunt()
+                LOGGER.info("Finished hunt: ${shinyHunt.pokemon.displayName()}")
             }
         }
     }
@@ -160,6 +164,7 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
             HuntData.PAUSED.add(shinyHunt.toSavedData())
             HuntData.save()
             this@HuntDisplayPane.parent.clearShinyHunt()
+            LOGGER.info("Paused hunt: ${shinyHunt.pokemon.displayName()}")
         }
     }
     private val editButton = SpriteButton(GENERIC_BLUE_BUTTON, ExtensibleWidthButtonRenderer(3), 70.0, 28.0).apply {
@@ -171,11 +176,13 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
         onAction = { _ ->
             HuntSettingsWindow(this@HuntDisplayPane.parent.mainStage, true) {
                 this@HuntDisplayPane.shinyHunt = it
+                LOGGER.info("Edited hunt: ${shinyHunt.pokemon.displayName()}")
             }.apply { set(shinyHunt.pokemon, shinyHunt.rolls, shinyHunt.baseOdds, shinyHunt.attempts) }
         }
     }
 
     init {
+        LOGGER.info("Setup hunt: ${shinyHunt.pokemon.displayName()}")
         counterObservable.addListener { _, _, _ -> }
         huntProperty.subscribe { hunt -> updateSprite(hunt.pokemon) }
         shinyOddsTitle.layoutXProperty().bind(widthProperty().subtract(shinyOddsTitle.widthProperty().add(shinyOdds.widthProperty())).divide(2))

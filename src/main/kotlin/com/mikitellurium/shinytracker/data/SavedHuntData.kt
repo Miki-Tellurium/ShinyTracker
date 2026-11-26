@@ -26,12 +26,13 @@ data class SavedHuntData(
             PrimitiveSerialDescriptor("Pokemon", PrimitiveKind.STRING)
 
         override fun serialize(encoder: Encoder, value: Pokemon) {
-            encoder.encodeString(value.spriteId())
+            val str = value.name.let { if (value.variant != null) "$it ${value.variant}" else it }
+            encoder.encodeString(str)
         }
 
         override fun deserialize(decoder: Decoder): Pokemon {
             val str = decoder.decodeString()
-            val array = str.split("_", limit = 2)
+            val array = str.split(" ", limit = 2)
             return if (str == NONE.name) NONE
             else PokemonData.LIST.find {
                  it.name == array[0] && array.getOrNull(1)?.let { v -> it.variant == v } ?: true

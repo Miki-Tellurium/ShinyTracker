@@ -20,7 +20,7 @@ val LOGGER: Logger = LoggerFactory.getLogger(ShinyTracker::class.java)
 // todo add paused and finished list window view
 // todo add new saved hunts at index 0 so most recent hunt is at start of list
 // todo add pokemon menu sprites for decorations
-// todo add temp file backup to current hunt every x second
+// todo restore temp file on startup if it exists
 
 class MainKt {
     fun main() {

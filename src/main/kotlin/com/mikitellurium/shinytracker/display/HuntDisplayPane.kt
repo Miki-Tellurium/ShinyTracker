@@ -5,6 +5,7 @@ import com.mikitellurium.shinytracker.data.HuntData
 import com.mikitellurium.shinytracker.data.NONE
 import com.mikitellurium.shinytracker.data.Pokemon
 import com.mikitellurium.shinytracker.data.ShinyHunt
+import com.mikitellurium.shinytracker.data.TempFile
 import com.mikitellurium.shinytracker.element.AnimatedButton
 import com.mikitellurium.shinytracker.element.ExtensibleWidthButtonRenderer
 import com.mikitellurium.shinytracker.element.SpriteButton
@@ -12,9 +13,11 @@ import com.mikitellurium.shinytracker.util.*
 import com.mikitellurium.shinytracker.window.ConfirmationWindow
 import com.mikitellurium.shinytracker.window.HuntSettingsWindow
 import com.mikitellurium.shinytracker.window.MainWindow
+import javafx.animation.PauseTransition
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.value.ObservableValue
+import javafx.event.EventHandler
 import javafx.scene.control.Label
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
@@ -22,6 +25,7 @@ import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.text.FontWeight
+import javafx.util.Duration
 import java.util.*
 
 
@@ -32,6 +36,7 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
         set(value) = huntProperty.set(value)
     // Re-targets automatically whenever the hunt is swapped
     private val counterObservable: ObservableValue<Number> = huntProperty.flatMap { it.counterProperty }
+    private val tempFileTimer = PauseTransition(Duration.seconds(60.0))
 
     private val pokemonName = Label().apply {
         font = font(FontWeight.BOLD, 40.0)
@@ -150,6 +155,7 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
                 HuntData.FINISHED.add(shinyHunt.toSavedData())
                 HuntData.save()
                 this@HuntDisplayPane.parent.clearShinyHunt()
+                TempFile.delete()
                 LOGGER.info("Finished hunt: ${shinyHunt.pokemon.displayName()}")
             }
         }
@@ -164,6 +170,7 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
             HuntData.PAUSED.add(shinyHunt.toSavedData())
             HuntData.save()
             this@HuntDisplayPane.parent.clearShinyHunt()
+            TempFile.delete()
             LOGGER.info("Paused hunt: ${shinyHunt.pokemon.displayName()}")
         }
     }
@@ -184,6 +191,10 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
     init {
         LOGGER.info("Setup hunt: ${shinyHunt.pokemon.displayName()}")
         counterObservable.addListener { _, _, _ -> }
+        tempFileTimer.onFinished = EventHandler { _ ->
+            TempFile.write(shinyHunt.toSavedData())
+            tempFileTimer.playFromStart()
+        }
         huntProperty.subscribe { hunt -> updateSprite(hunt.pokemon) }
         shinyOddsTitle.layoutXProperty().bind(widthProperty().subtract(shinyOddsTitle.widthProperty().add(shinyOdds.widthProperty())).divide(2))
         shinyOdds.layoutXProperty().bind(shinyOddsTitle.layoutXProperty().add(shinyOddsTitle.widthProperty()))
@@ -191,6 +202,7 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
         dryStreak.layoutXProperty().bind(dryStreakTitle.layoutXProperty().add(dryStreakTitle.widthProperty()))
         children.addAll(backgroundFade, pokemonName, renderBounds, pokemonRender, counter, increaseButton, shinyOddsTitle, shinyOdds,
             dryStreakTitle, dryStreak, finishButton, pauseButton, editButton)
+        tempFileTimer.play()
     }
 
     fun updateSprite(pokemon: Pokemon) {

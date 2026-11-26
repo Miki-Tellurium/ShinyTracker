@@ -13,6 +13,7 @@ val HOME_DIR: String = System.getProperty("user.home")
 const val DATABASE_DIR = ".local/share/shinytracker"
 const val FINISHED_HUNTS = "finished_hunts.json"
 const val PAUSED_HUNTS = "paused_hunts.json"
+const val TEMP_DATA = "temp.json"
 
 // Sprites
 const val WINDOW_ICON = "/sprites/pokeball_logo.png"

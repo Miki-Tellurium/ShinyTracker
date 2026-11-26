@@ -2,6 +2,7 @@ package com.mikitellurium.shinytracker.window
 
 import com.mikitellurium.shinytracker.data.HuntData
 import com.mikitellurium.shinytracker.data.ShinyHunt
+import com.mikitellurium.shinytracker.data.TempFile
 import com.mikitellurium.shinytracker.display.HuntDisplayPane
 import com.mikitellurium.shinytracker.display.NewHuntPane
 import com.mikitellurium.shinytracker.util.*
@@ -27,6 +28,7 @@ class MainWindow(val mainStage: Stage) {
             if (pane is HuntDisplayPane) {
                 HuntData.PAUSED.add(pane.shinyHunt.toSavedData())
                 HuntData.save()
+                TempFile.delete()
             }
         }
         mainStage.show()

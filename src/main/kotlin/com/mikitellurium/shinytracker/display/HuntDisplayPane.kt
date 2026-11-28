@@ -111,11 +111,10 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
             LOGGER.info("Increased counter. Current attempts: ${shinyHunt.attempts}")
         }
     }
-    private val shinyOddsTitle = Label().apply {
-        prefWidth = 120.0
+    private val shinyOddsTitle = Label("Odds").apply {
+        prefWidth = 125.0
         font = font(FontWeight.BOLD, 20.0)
         styleClass.add("info-label-header")
-        text = "Odds"
         layoutYProperty().bind(increaseButton.layoutYProperty().add(increaseButton.heightProperty()).add(10))
     }
     private val shinyOdds = Label().apply {
@@ -127,14 +126,13 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
             { "1/${shinyHunt.chance()}" }, counterObservable
         ))
     }
-    private val dryStreakTitle = Label().apply {
-        prefWidth = 120.0
+    private val endChanceTitle = Label("End Chance").apply {
+        prefWidth = 125.0
         styleClass.add("info-label-header")
         font = font(FontWeight.BOLD, 20.0)
-        text = "Dry Streak"
         layoutYProperty().bind(shinyOddsTitle.layoutYProperty().add(shinyOddsTitle.heightProperty()).subtract(1))
     }
-    private val dryStreak = Label().apply {
+    private val endChance = Label().apply {
         styleClass.add("info-label")
         prefWidth = 180.0
         font = font(FontWeight.BOLD, 20.0)
@@ -148,7 +146,7 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
         styleClass.add("sprite-button")
         font = font(FontWeight.EXTRA_BOLD, 14.0)
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2).subtract(widthProperty().add(40)))
-        layoutYProperty().bind(dryStreakTitle.layoutYProperty().add(dryStreakTitle.heightProperty().add(12)))
+        layoutYProperty().bind(endChanceTitle.layoutYProperty().add(endChanceTitle.heightProperty().add(12)))
         text = "Finish"
         onAction = { _ ->
             ConfirmationWindow(this@HuntDisplayPane.parent.mainStage, "Are you sure you want to end this shiny hunt? The data will be saved.") {
@@ -164,7 +162,7 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
         styleClass.add("sprite-button")
         font = font(FontWeight.EXTRA_BOLD, 14.0)
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2))
-        layoutYProperty().bind(dryStreakTitle.layoutYProperty().add(dryStreakTitle.heightProperty().add(12)))
+        layoutYProperty().bind(endChanceTitle.layoutYProperty().add(endChanceTitle.heightProperty().add(12)))
         text = "Pause"
         onAction = { _ ->
             HuntData.addPaused(shinyHunt.toSavedData())
@@ -178,7 +176,7 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
         styleClass.add("sprite-button")
         font = font(FontWeight.EXTRA_BOLD, 14.0)
         layoutXProperty().bind(this@HuntDisplayPane.widthProperty().subtract(widthProperty()).divide(2).add(widthProperty().add(40)))
-        layoutYProperty().bind(dryStreakTitle.layoutYProperty().add(dryStreakTitle.heightProperty().add(12)))
+        layoutYProperty().bind(endChanceTitle.layoutYProperty().add(endChanceTitle.heightProperty().add(12)))
         text = "Edit"
         onAction = { _ ->
             HuntSettingsWindow(this@HuntDisplayPane.parent.mainStage, true) {
@@ -198,10 +196,10 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
         huntProperty.subscribe { hunt -> updateSprite(hunt.pokemon) }
         shinyOddsTitle.layoutXProperty().bind(widthProperty().subtract(shinyOddsTitle.widthProperty().add(shinyOdds.widthProperty())).divide(2))
         shinyOdds.layoutXProperty().bind(shinyOddsTitle.layoutXProperty().add(shinyOddsTitle.widthProperty()))
-        dryStreakTitle.layoutXProperty().bind(widthProperty().subtract(dryStreakTitle.widthProperty().add(dryStreak.widthProperty())).divide(2))
-        dryStreak.layoutXProperty().bind(dryStreakTitle.layoutXProperty().add(dryStreakTitle.widthProperty()))
+        endChanceTitle.layoutXProperty().bind(widthProperty().subtract(endChanceTitle.widthProperty().add(endChance.widthProperty())).divide(2))
+        endChance.layoutXProperty().bind(endChanceTitle.layoutXProperty().add(endChanceTitle.widthProperty()))
         children.addAll(backgroundFade, pokemonName, renderBounds, pokemonRender, counter, increaseButton, shinyOddsTitle, shinyOdds,
-            dryStreakTitle, dryStreak, finishButton, pauseButton, editButton)
+            endChanceTitle, endChance, finishButton, pauseButton, editButton)
         tempFileTimer.play()
     }
 

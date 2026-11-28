@@ -38,7 +38,7 @@ class NewHuntPane(private val parent: MainWindow): StackPane() {
         fixedCellSize = cellHeight
         cellFactory = {
             PausedHuntCell {
-                HuntData.PAUSED.remove(it)
+                HuntData.removePaused(it)
                 this@NewHuntPane.parent.setShinyHunt(it.toHunt())
             }
         }
@@ -84,7 +84,7 @@ class NewHuntPane(private val parent: MainWindow): StackPane() {
         pausedList.minHeightProperty().bind(listHeight)
         pausedList.maxHeightProperty().bind(listHeight)
 
-        val entries = HuntData.PAUSED.take(10)
+        val entries = HuntData.getPaused { it.take(10) }
         if (entries.isNotEmpty()) {
             pausedList.items.addAll(entries)
             grid.children.addAll(pausedTitle, pausedList)

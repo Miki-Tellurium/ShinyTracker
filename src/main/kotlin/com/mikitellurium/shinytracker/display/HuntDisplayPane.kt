@@ -152,7 +152,7 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
         text = "Finish"
         onAction = { _ ->
             ConfirmationWindow(this@HuntDisplayPane.parent.mainStage, "Are you sure you want to end this shiny hunt? The data will be saved.") {
-                HuntData.FINISHED.add(shinyHunt.toSavedData())
+                HuntData.addFinished(shinyHunt.toSavedData())
                 HuntData.save()
                 this@HuntDisplayPane.parent.clearShinyHunt()
                 TempFile.delete()
@@ -167,7 +167,7 @@ class HuntDisplayPane(val parent: MainWindow, initialHunt: ShinyHunt): Pane() {
         layoutYProperty().bind(dryStreakTitle.layoutYProperty().add(dryStreakTitle.heightProperty().add(12)))
         text = "Pause"
         onAction = { _ ->
-            HuntData.PAUSED.add(shinyHunt.toSavedData())
+            HuntData.addPaused(shinyHunt.toSavedData())
             HuntData.save()
             this@HuntDisplayPane.parent.clearShinyHunt()
             TempFile.delete()

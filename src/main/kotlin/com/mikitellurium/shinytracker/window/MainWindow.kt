@@ -5,7 +5,9 @@ import com.mikitellurium.shinytracker.data.ShinyHunt
 import com.mikitellurium.shinytracker.data.TempFile
 import com.mikitellurium.shinytracker.display.HuntDisplayPane
 import com.mikitellurium.shinytracker.display.NewHuntPane
-import com.mikitellurium.shinytracker.util.*
+import com.mikitellurium.shinytracker.util.APP_NAME
+import com.mikitellurium.shinytracker.util.WINDOW_ICON
+import com.mikitellurium.shinytracker.util.withDefaultStyle
 import javafx.scene.Scene
 import javafx.scene.image.Image
 import javafx.stage.Screen
@@ -26,10 +28,10 @@ class MainWindow(val mainStage: Stage) {
         mainStage.onCloseRequest = {
             val pane = mainStage.scene.root
             if (pane is HuntDisplayPane) {
-                HuntData.PAUSED.add(pane.shinyHunt.toSavedData())
+                HuntData.addPaused(pane.shinyHunt.toSavedData())
                 HuntData.save()
-                TempFile.delete()
             }
+            TempFile.delete()
         }
         mainStage.show()
     }

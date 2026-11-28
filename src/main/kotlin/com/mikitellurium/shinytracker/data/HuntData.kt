@@ -9,14 +9,21 @@ import kotlinx.serialization.json.Json
 import java.io.File
 
 object HuntData {
-    var FINISHED = mutableListOf<SavedHuntData>()
-    var PAUSED = mutableListOf<SavedHuntData>()
+    private var finished = mutableListOf<SavedHuntData>()
+    private var paused = mutableListOf<SavedHuntData>()
+
+    fun getPaused(filter: (List<SavedHuntData>) -> List<SavedHuntData> = { l -> l }): List<SavedHuntData> = filter(paused.toList())
+    fun getFinished(filter: (List<SavedHuntData>) -> List<SavedHuntData> = { l -> l }): List<SavedHuntData> = filter(finished.toList())
+    fun addPaused(data: SavedHuntData) = paused.add(0, data)
+    fun addFinished(data: SavedHuntData) = finished.add(0, data)
+    fun removePaused(data: SavedHuntData) = paused.remove(data)
+    fun removeFinished(data: SavedHuntData) = finished.remove(data)
 
     fun save() {
         val json = Json { prettyPrint = true }
         val array = arrayListOf(
-            Pair(FINISHED, File(HOME_DIR).resolve(DATABASE_DIR).resolve(FINISHED_HUNTS)),
-            Pair(PAUSED, File(HOME_DIR).resolve(DATABASE_DIR).resolve(PAUSED_HUNTS))
+            Pair(finished, File(HOME_DIR).resolve(DATABASE_DIR).resolve(FINISHED_HUNTS)),
+            Pair(paused, File(HOME_DIR).resolve(DATABASE_DIR).resolve(PAUSED_HUNTS))
         )
         array.forEach { (list, file) ->
             if (!file.exists()) file.parentFile.mkdirs()
@@ -28,8 +35,8 @@ object HuntData {
     }
 
     fun reload() {
-        FINISHED = load(FINISHED_HUNTS).toMutableList()
-        PAUSED = load(PAUSED_HUNTS).toMutableList()
+        finished = load(FINISHED_HUNTS).toMutableList()
+        paused = load(PAUSED_HUNTS).toMutableList()
         LOGGER.info("Loaded hunt data.")
     }
 

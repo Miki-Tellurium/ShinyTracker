@@ -16,7 +16,6 @@ val LOGGER: Logger = LoggerFactory.getLogger(ShinyTracker::class.java)
 
 // todo red highlight on hunt setting window when pokemon is invalid
 // todo add paused and finished list window view
-// todo add new saved hunts at index 0 so most recent hunt is at start of list
 // todo add pokemon menu sprites for decorations
 // todo restore temp file on startup if it exists
 

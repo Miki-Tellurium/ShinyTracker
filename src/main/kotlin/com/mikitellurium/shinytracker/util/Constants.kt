@@ -9,8 +9,8 @@ const val APP_VERSION = "0.1-beta"
 const val CSS_STYLE = "style.css"
 
 // Paths
-val HOME_DIR: String = System.getProperty("user.home")
-const val DATABASE_DIR = ".local/share/shinytracker"
+val HOME_DIR: String = if (isDebug) "" else System.getProperty("user.home")
+val DATABASE_DIR = if (isDebug) "out" else ".local/share/shinytracker"
 const val FINISHED_HUNTS = "finished_hunts.json"
 const val PAUSED_HUNTS = "paused_hunts.json"
 const val TEMP_DATA = "temp.json"
@@ -47,3 +47,4 @@ val POKEMON_BACKGROUND_FADE = Image("/sprites/pokemon_background_fade.png", 512.
 const val POKEMON_DATA = "/data/pokemons.json"
 // Debug
 val TEST_BUTTON_SPRITE = Image("/sprites/button/test_button.png", 70.0, 160.0, true, false)
+const val isDebug = false

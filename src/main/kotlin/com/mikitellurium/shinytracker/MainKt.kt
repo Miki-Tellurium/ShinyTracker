@@ -14,9 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 val LOGGER: Logger = LoggerFactory.getLogger(ShinyTracker::class.java)
 
-// TODO on close save the current hunt as paused
 // todo red highlight on hunt setting window when pokemon is invalid
-// todo center new hunt button is paused list is empty
 // todo add paused and finished list window view
 // todo add new saved hunts at index 0 so most recent hunt is at start of list
 // todo add pokemon menu sprites for decorations

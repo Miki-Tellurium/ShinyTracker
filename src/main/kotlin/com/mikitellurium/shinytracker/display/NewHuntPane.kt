@@ -12,42 +12,28 @@ import com.mikitellurium.shinytracker.window.MainWindow
 import javafx.beans.binding.Bindings
 import javafx.geometry.Insets
 import javafx.geometry.Pos
-import javafx.geometry.VPos
 import javafx.scene.control.Label
-import javafx.scene.control.ListCell
 import javafx.scene.control.ListView
-import javafx.scene.control.OverrunStyle
-import javafx.scene.layout.ColumnConstraints
-import javafx.scene.layout.GridPane
-import javafx.scene.layout.HBox
-import javafx.scene.layout.Priority
-import javafx.scene.layout.RowConstraints
-import javafx.scene.layout.VBox
+import javafx.scene.layout.*
 import javafx.scene.text.FontWeight
-import javafx.scene.text.Text
 
 
-class NewHuntPane(private val parent: MainWindow): GridPane() {
+class NewHuntPane(private val parent: MainWindow): StackPane() {
     private val credits = Label("v$APP_VERSION by Miki Tellurium").apply {
-        styleClass.add("text")
-        setConstraints(this, 0, 0)
-        setValignment(this, VPos.TOP)
+        setAlignment(this, Pos.TOP_RIGHT)
         font = font(FontWeight.BOLD, 14.0)
-        maxWidth = Double.MAX_VALUE
+        translateX = -3.0
     }
+
+    private val grid = GridPane()
     private val pausedTitle = Label("Paused hunts:").apply {
-        styleClass.add("text")
-        setConstraints(this, 0, 1)
-        setValignment(this, VPos.BOTTOM)
-        setMargin(this, Insets(50.0, 0.0, 0.0, 0.0))
+        GridPane.setConstraints(this, 0, 0)
         font = font(FontWeight.BOLD, 18.0)
-        maxWidth = Double.MAX_VALUE
     }
     val cellHeight = 36.0
     private val pausedList = ListView<SavedHuntData>().apply {
         styleClass.add("paused-hunt-list")
-        setConstraints(this, 0, 2)
-        setValignment(this, VPos.TOP)
+        GridPane.setConstraints(this, 0, 1)
         maxWidth = 200.0
         fixedCellSize = cellHeight
         cellFactory = {
@@ -58,9 +44,8 @@ class NewHuntPane(private val parent: MainWindow): GridPane() {
         }
     }
     private val buttonBox = VBox().apply {
-        setConstraints(this, 1, 0)
-        setRowSpan(this, 3)
-        setFillHeight(this, true)
+        GridPane.setConstraints(this, 1, 0)
+        GridPane.setRowSpan(this, 3)
         alignment = Pos.CENTER
     }
 
@@ -69,16 +54,18 @@ class NewHuntPane(private val parent: MainWindow): GridPane() {
     }
     private val newHuntButton = AnimatedButton(NEW_HUNT_BUTTON).apply{
         setPrefSize(180.0, 180.0)
-        onAction = { HuntSettingsWindow(this@NewHuntPane.parent.mainStage) {
-            this@NewHuntPane.parent.setShinyHunt(it)
-        } }
+        onAction = {
+            HuntSettingsWindow(this@NewHuntPane.parent.mainStage) {
+                this@NewHuntPane.parent.setShinyHunt(it)
+            }
+        }
     }
 
     init {
         padding = Insets(0.0)
 
         // Column 0: paused list, hard-capped. Column 1: button box, takes the rest.
-        columnConstraints.addAll(
+        grid.columnConstraints.addAll(
             ColumnConstraints().apply {
                 minWidth = 0.0
                 maxWidth = 200.0
@@ -86,7 +73,7 @@ class NewHuntPane(private val parent: MainWindow): GridPane() {
             },
             ColumnConstraints().apply { hgrow = Priority.ALWAYS }
         )
-        rowConstraints.addAll(
+        grid.rowConstraints.addAll(
             RowConstraints().apply { vgrow = Priority.NEVER },
             RowConstraints().apply { vgrow = Priority.NEVER },
             RowConstraints().apply { vgrow = Priority.ALWAYS }
@@ -97,8 +84,13 @@ class NewHuntPane(private val parent: MainWindow): GridPane() {
         pausedList.minHeightProperty().bind(listHeight)
         pausedList.maxHeightProperty().bind(listHeight)
 
-        pausedList.items.addAll(HuntData.PAUSED.take(10))
+        val entries = HuntData.PAUSED.take(10)
+        if (entries.isNotEmpty()) {
+            pausedList.items.addAll(entries)
+            grid.children.addAll(pausedTitle, pausedList)
+        }
         buttonBox.children.addAll(newHunt, newHuntButton)
-        this.children.addAll(credits, pausedTitle, pausedList, buttonBox)
+        grid.children.add(buttonBox)
+        this.children.addAll(grid, credits)
     }
 }
